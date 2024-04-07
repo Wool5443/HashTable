@@ -3,8 +3,10 @@
 
 int main()
 {
+    const char* logFolder = "log";
+
     HashTable table = {};
-    table.Init(101, CalculateHash);
+    table.Init(101, CalculateHash, logFolder);
 
     table.Add("Hello");
     table.Add("world");
