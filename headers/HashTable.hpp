@@ -3,7 +3,7 @@
 #include "LinkedList.hpp"
 #include "HashTableSettings.hpp"
 
-typedef uint64_t (*hashFunction_t)(const void* data);
+typedef uint64_t (*hashFunction_t)(const void* data, size_t length, uint64_t seed);
 
 struct HashTableElement
 {
@@ -19,10 +19,15 @@ struct HashTableElementResult
 
 struct HashTable
 {
-    LinkedList* containers;
-    hashFunction_t hashF;
+    LinkedList*    containers;
+    size_t         containersCount;
+    hashFunction_t hashFunc;
 
-    ErrorCode              Init();
+    ErrorCode              Init(size_t containersCount, hashFunction_t hashFunc);
+
+    ErrorCode              Verify();
+
+    void                   DumpText();
 
     ErrorCode              Add(hashTableKey_t key);
 

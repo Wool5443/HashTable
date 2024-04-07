@@ -4,7 +4,7 @@
 int main()
 {
     HashTable table = {};
-    table.Init();
+    table.Init(101, CalculateHash);
 
     table.Add("Hello");
     table.Add("world");
