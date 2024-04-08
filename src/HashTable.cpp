@@ -1,6 +1,13 @@
 // #include <stdlib.h>
+#include <string.h>
 #include "HashTable.hpp"
 #include "PrettyDumpList.hpp"
+
+static const uint64_t seed = 0xabcfedfabfeacdfd;
+
+#define GET_CNT_NUM CalculateHash(key, keySize, seed) % this->containersCount
+
+HashTableElementResult _get(HashTable* hashTable, hashTableKey_t key, size_t keySize, LinkedList* container);
 
 ErrorCode HashTable::Init(size_t containersCount, hashFunction_t hashFunc, const char* logFolder)
 {
@@ -30,74 +37,56 @@ ErrorCode HashTable::Verify()
     return EVERYTHING_FINE;
 }
 
-#define PRINT_LOG_INDENT(indentSize, ...)   \
-do                                          \
-{                                           \
-    WriteSpaces(outTextFile, indentSize);   \
-    fprintf(outTextFile, __VA_ARGS__);      \
-} while (0)
-ErrorCode _dumpHashTable(HashTable* hashTable, ErrorCode error, const char* outTextPath,
-                         SourceCodePosition* caller)
+ErrorCode HashTable::Add(hashTableKey_t key, size_t keySize)
 {
-    MyAssertSoft(hashTable,   ERROR_NULLPTR);
-    MyAssertSoft(outTextPath, ERROR_BAD_FILE);
-    MyAssertSoft(caller,      ERROR_NULLPTR);
+    LinkedList* container = &this->containers[GET_CNT_NUM];
+    
+    HashTableElementResult elem = _get(this, key, keySize, container);
 
-    FILE* outTextFile = fopen(outTextPath, "w");
-    if (!outTextFile) return ERROR_BAD_FILE;
-
-    PRINT_LOG_INDENT(0, "HashTable[%p] called from %s(%zu) %s()\n", hashTable,
-                                                                    caller->fileName,
-                                                                    caller->line,
-                                                                    caller->name);
-    PRINT_LOG_INDENT(0, "HashTable condition - %s[%d]\n", ERROR_CODE_NAMES[error], error);
-
-    PRINT_LOG_INDENT(0, "{\n");
-    PRINT_LOG_INDENT(4, "hash functions  = %p\n",  hashTable->hashFunc);
-    PRINT_LOG_INDENT(4, "containersCount = %zu\n", hashTable->containersCount);
-    PRINT_LOG_INDENT(4, "containers[%p]:\n",       hashTable->containers);
-
-    PRINT_LOG_INDENT(4, "{\n");
-
-    for (size_t i = 0; i < hashTable->containersCount; i++)
+    if (elem.error == EVERYTHING_FINE)
     {
-        LinkedList* listPtr = &hashTable->containers[i];
-        ErrorCode   listErr = listPtr->Verify();
-        PRINT_LOG_INDENT(8, "List[%p] condition - %s[%d]\n", ERROR_CODE_NAMES[listErr], listErr);
-        PRINT_LOG_INDENT(8, "{\n");
-        PRINT_LOG_INDENT(12, "data[%p]\n",       listPtr->data);
-        PRINT_LOG_INDENT(12, "prev[%p]\n",       listPtr->prev);
-        PRINT_LOG_INDENT(12, "next[%p]\n",       listPtr->next);
-        PRINT_LOG_INDENT(12, "length = %zu\n",   listPtr->length);
-        PRINT_LOG_INDENT(12, "capacity = %zu\n", listPtr->capacity);
-        PRINT_LOG_INDENT(12, "freeHead = %zu\n", listPtr->freeHead);
-        PRINT_LOG_INDENT(8, "}\n");
+        elem.value->count++;
+        return EVERYTHING_FINE;
     }
 
-    PRINT_LOG_INDENT(4, "}\n");
-    PRINT_LOG_INDENT(0, "}\n");
-
-    fclose(outTextFile);
-
-    return EVERYTHING_FINE;
+    return container->PushBack({ key, 1 });
 }
 
-ErrorCode HashTable::Add(hashTableKey_t key)
+ErrorCode HashTable::Remove(hashTableKey_t key, size_t keySize)
 {
-    return EVERYTHING_FINE;
+    LinkedList* container = &this->containers[GET_CNT_NUM];
+
+    HashTableElementResult elem = _get(this, key, keySize, container);
+
+    RETURN_ERROR(elem.error);
+
+    size_t index = (elem.value - container->data) / sizeof(*container->data);
+
+    return container->Pop(index).error;
 }
 
-ErrorCode HashTable::Remove(hashTableKey_t key)
+bool HashTable::Contains(hashTableKey_t key, size_t keySize)
 {
-    return EVERYTHING_FINE;
+    if (keySize == 0) return false;
+
+    return _get(this, key, keySize, &this->containers[GET_CNT_NUM]).error == EVERYTHING_FINE;
 }
 
-bool HashTable::Contains(hashTableKey_t key)
+HashTableElementResult HashTable::Get(hashTableKey_t key, size_t keySize)
 {
-    return EVERYTHING_FINE;
+    MyAssertSoftResult(keySize, nullptr, ERROR_BAD_NUMBER);
+
+    return _get(this, key, keySize, &this->containers[GET_CNT_NUM]);
 }
 
-HashTableElementResult HashTable::Get(hashTableKey_t key)
+HashTableElementResult _get(HashTable* hashTable, hashTableKey_t key, size_t keySize, LinkedList* container)
 {
-    return { 0, EVERYTHING_FINE };
+    if (container->length == 1)
+        return { nullptr, ERROR_NOT_FOUND };
+
+    for (size_t i = 1; i <= container->length; i++)
+        if (container->data[i].key &&  strncmp(container->data[i].key, key, keySize) == 0)
+            return { &container->data[i], EVERYTHING_FINE }; 
+
+    return { nullptr, ERROR_NOT_FOUND };
 }

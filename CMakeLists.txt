@@ -20,7 +20,9 @@ set(SOURCES
     "LinkedList/headers/ListSettings.ini"
     "src/main.cpp"
     "src/HashTable.cpp"
+    "src/DumpHashTable.cpp"
     "headers/HashTable.hpp"
+    "headers/DumpHashTable.hpp"
     "headers/HashTableSettings.hpp"
 )
 
