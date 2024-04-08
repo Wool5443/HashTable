@@ -17,7 +17,11 @@ set(SOURCES
     "LinkedList/src/PrettyDumpList.cpp"
     "LinkedList/headers/LinkedList.hpp"
     "LinkedList/headers/PrettyDumpList.hpp"
+    "LinkedList/headers/ListSettings.ini"
     "src/main.cpp"
+    "src/HashTable.cpp"
+    "headers/HashTable.hpp"
+    "headers/HashTableSettings.hpp"
 )
 
 file(MAKE_DIRECTORY "LinkedList/log")
@@ -25,7 +29,7 @@ file(MAKE_DIRECTORY "LinkedList/log/txt")
 file(MAKE_DIRECTORY "LinkedList/log/dot")
 file(MAKE_DIRECTORY "LinkedList/log/img")
 
-include_directories(headers LinkedList LinkedList/Utils)
+include_directories(headers LinkedList/headers LinkedList/Utils)
 
 add_executable(${projectName} ${SOURCES})
 

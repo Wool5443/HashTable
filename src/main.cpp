@@ -3,10 +3,12 @@
 
 int main()
 {
-    const char* logFolder = "log";
+    const char* logFolder = "/home/twenty/Programming/HashTable/log/LinkedList";
+    const char* hashLog   = "/home/twenty/Programming/HashTable/log/hash.txt";
 
     HashTable table = {};
-    table.Init(101, CalculateHash, logFolder);
+    table.Init(2, CalculateHash, logFolder);
+    DumpHashTable(&table, table.Verify(), hashLog);
 
     table.Add("Hello");
     table.Add("world");

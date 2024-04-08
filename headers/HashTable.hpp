@@ -28,13 +28,11 @@ struct HashTable
     size_t         containersCount;
     hashFunction_t hashFunc;
 
-    char*          logFolder;
+    const char*    logFolder;
 
     ErrorCode              Init(size_t containersCount, hashFunction_t hashFunc, const char* logFolder);
 
     ErrorCode              Verify();
-
-    void                   DumpText();
 
     ErrorCode              Add(hashTableKey_t key);
 
@@ -44,3 +42,12 @@ struct HashTable
 
     HashTableElementResult Get(hashTableKey_t key);
 };
+
+#define DumpHashTable(hashTable, error, outTextPath)                        \
+do                                                                          \
+{                                                                           \
+    SourceCodePosition _caller = { __FILE__, __LINE__, __func__ };          \
+    return _dumpHashTable(hashTable, error, outTextPath, &_caller);         \
+} while (0)
+ErrorCode _dumpHashTable(HashTable* hashTable, ErrorCode error, const char* outTextPath, 
+                         SourceCodePosition* caller);
