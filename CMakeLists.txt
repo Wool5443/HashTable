@@ -1,4 +1,3 @@
-
 cmake_minimum_required(VERSION 3.5)
 set(projectName "HashTable")
 
@@ -21,9 +20,11 @@ set(SOURCES
     "src/main.cpp"
     "src/HashTable.cpp"
     "src/DumpHashTable.cpp"
+    "src/FileLoader.cpp"
     "headers/HashTable.hpp"
     "headers/DumpHashTable.hpp"
     "headers/HashTableSettings.hpp"
+    "headers/FileLoader.hpp"
 )
 
 file(MAKE_DIRECTORY "log/LinkedList/")

@@ -2,40 +2,35 @@
 #include "HashTable.hpp"
 #include "PrettyDumpList.hpp"
 #include "DumpHashTable.hpp"
+#include "FileLoader.hpp"
 
 int main()
 {
     const char* logFolder = "/home/twenty/Programming/HashTable/log/LinkedList";
     const char* hashLog   = "/home/twenty/Programming/HashTable/log/hash.txt";
 
+    const char* wordsPath = "/home/twenty/Programming/HashTable/Words.txt";
+
     RETURN_ERROR(StartHtmlLogging(logFolder));
 
     HashTable table = {};
-    table.Init(2, CalculateHash, logFolder);
-    DumpHashTableText(&table, table.Verify(), hashLog);
 
-    table.Add("Hello", 5);
-    table.Add("world", 5);
-    table.Add("world", 5);
-    table.Add("friends", 7);
-    table.Add("friends", 7);
-    table.Add("friends", 7);
+    RETURN_ERROR(table.Init(101, CalculateHash, logFolder));
 
-    DumpHashTable(&table, table.Verify(), hashLog);
+    LoadResult loadRes = LoadFileToTable(&table, wordsPath);
+    RETURN_ERROR(loadRes.error);
 
-    HashTableElementResult helloRes   = table.Get("Hello", 5);
-    MyAssertSoft(!helloRes.error, helloRes.error);
+    // DumpHashTable(&table, table.Verify(), hashLog);
 
-    HashTableElementResult worldRes   = table.Get("world", 5);
-    MyAssertSoft(!worldRes.error, worldRes.error);
+    const char* word = "Man";
 
-    HashTableElementResult friendsRes = table.Get("friends", 7);
-    MyAssertSoft(!friendsRes.error, friendsRes.error);
-
-    printf("%s: %llu\n", helloRes.value->key, helloRes.value->count);
-    printf("%s: %llu\n", worldRes.value->key, worldRes.value->count);
-    printf("%s: %llu\n", friendsRes.value->key, friendsRes.value->count);
+    HashTableElementResult wordRes = table.Get(word, 4);
+    printf("%s: %zu\n", wordRes.value->key, wordRes.value->count);
 
     EndHtmlLogging();
+
+    free(loadRes.buffer);
+    RETURN_ERROR(table.Destructor());
+
     return 0;
 }

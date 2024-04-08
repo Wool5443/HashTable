@@ -5,7 +5,7 @@
 
 static const uint64_t seed = 0xabcfedfabfeacdfd;
 
-#define GET_CNT_NUM CalculateHash(key, keySize, seed) % this->containersCount
+#define GET_CNT_NUM this->hashFunc(key, keySize, seed) % this->containersCount
 
 HashTableElementResult _get(HashTable* hashTable, hashTableKey_t key, size_t keySize, LinkedList* container);
 
@@ -24,6 +24,20 @@ ErrorCode HashTable::Init(size_t containersCount, hashFunction_t hashFunc, const
     this->containers      = containers;
     this->hashFunc        = hashFunc;
     this->logFolder       = logFolder;
+
+    return EVERYTHING_FINE;
+}
+
+ErrorCode HashTable::Destructor()
+{
+    RETURN_ERROR(this->Verify());
+
+    for (size_t i = 0; i < this->containersCount; i++)
+        RETURN_ERROR(this->containers[i].Destructor());
+
+    this->containersCount = SIZET_POISON;
+    this->hashFunc        = nullptr;
+    this->logFolder       = nullptr;
 
     return EVERYTHING_FINE;
 }
@@ -67,15 +81,11 @@ ErrorCode HashTable::Remove(hashTableKey_t key, size_t keySize)
 
 bool HashTable::Contains(hashTableKey_t key, size_t keySize)
 {
-    if (keySize == 0) return false;
-
     return _get(this, key, keySize, &this->containers[GET_CNT_NUM]).error == EVERYTHING_FINE;
 }
 
 HashTableElementResult HashTable::Get(hashTableKey_t key, size_t keySize)
 {
-    MyAssertSoftResult(keySize, nullptr, ERROR_BAD_NUMBER);
-
     return _get(this, key, keySize, &this->containers[GET_CNT_NUM]);
 }
 
@@ -84,9 +94,10 @@ HashTableElementResult _get(HashTable* hashTable, hashTableKey_t key, size_t key
     if (container->length == 1)
         return { nullptr, ERROR_NOT_FOUND };
 
-    for (size_t i = 1; i <= container->length; i++)
-        if (container->data[i].key &&  strncmp(container->data[i].key, key, keySize) == 0)
-            return { &container->data[i], EVERYTHING_FINE }; 
+    for (size_t i = 1; i < container->length; i++)
+        if (container->prev[i] != SIZET_POISON)
+            if (container->data[i].key && strncmp(container->data[i].key, key, keySize) == 0)
+                return { &container->data[i], EVERYTHING_FINE }; 
 
     return { nullptr, ERROR_NOT_FOUND };
 }

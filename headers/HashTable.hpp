@@ -14,6 +14,7 @@ struct HashTable
     const char*    logFolder;
 
     ErrorCode              Init(size_t containersCount, hashFunction_t hashFunc, const char* logFolder);
+    ErrorCode              Destructor();
 
     ErrorCode              Verify();
 
