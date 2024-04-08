@@ -24,10 +24,10 @@ set(SOURCES
     "headers/HashTableSettings.hpp"
 )
 
-file(MAKE_DIRECTORY "LinkedList/log")
-file(MAKE_DIRECTORY "LinkedList/log/txt")
-file(MAKE_DIRECTORY "LinkedList/log/dot")
-file(MAKE_DIRECTORY "LinkedList/log/img")
+file(MAKE_DIRECTORY "log/LinkedList/")
+file(MAKE_DIRECTORY "log/LinkedList/txt")
+file(MAKE_DIRECTORY "log/LinkedList/dot")
+file(MAKE_DIRECTORY "log/LinkedList/img")
 
 include_directories(headers LinkedList/headers LinkedList/Utils)
 

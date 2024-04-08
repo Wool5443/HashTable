@@ -47,7 +47,7 @@ struct HashTable
 do                                                                          \
 {                                                                           \
     SourceCodePosition _caller = { __FILE__, __LINE__, __func__ };          \
-    return _dumpHashTable(hashTable, error, outTextPath, &_caller);         \
+    _dumpHashTable(hashTable, error, outTextPath, &_caller);         \
 } while (0)
 ErrorCode _dumpHashTable(HashTable* hashTable, ErrorCode error, const char* outTextPath, 
                          SourceCodePosition* caller);
