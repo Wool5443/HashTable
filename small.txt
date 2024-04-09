@@ -1,3 +1,3 @@
-5 hello
-5 world
-7 friends
+hello
+world
+friends

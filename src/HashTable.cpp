@@ -7,7 +7,7 @@ static const uint64_t seed = 0xabcfedfabfeacdfd;
 
 #define GET_CNT_NUM this->hashFunc(key, keySize, seed) % this->containersCount
 
-HashTableElementResult _get(HashTable* hashTable, hashTableKey_t key, size_t keySize, LinkedList* container);
+HashTableElementResult _get(hashTableKey_t key, size_t keySize, LinkedList* container);
 
 ErrorCode HashTable::Init(size_t containersCount, hashFunction_t hashFunc, const char* logFolder)
 {
@@ -34,6 +34,7 @@ ErrorCode HashTable::Destructor()
 
     for (size_t i = 0; i < this->containersCount; i++)
         RETURN_ERROR(this->containers[i].Destructor());
+    free(this->containers);
 
     this->containersCount = SIZET_POISON;
     this->hashFunc        = nullptr;
@@ -55,7 +56,7 @@ ErrorCode HashTable::Add(hashTableKey_t key, size_t keySize)
 {
     LinkedList* container = &this->containers[GET_CNT_NUM];
     
-    HashTableElementResult elem = _get(this, key, keySize, container);
+    HashTableElementResult elem = _get(key, keySize, container);
 
     if (elem.error == EVERYTHING_FINE)
     {
@@ -70,7 +71,7 @@ ErrorCode HashTable::Remove(hashTableKey_t key, size_t keySize)
 {
     LinkedList* container = &this->containers[GET_CNT_NUM];
 
-    HashTableElementResult elem = _get(this, key, keySize, container);
+    HashTableElementResult elem = _get(key, keySize, container);
 
     RETURN_ERROR(elem.error);
 
@@ -81,15 +82,15 @@ ErrorCode HashTable::Remove(hashTableKey_t key, size_t keySize)
 
 bool HashTable::Contains(hashTableKey_t key, size_t keySize)
 {
-    return _get(this, key, keySize, &this->containers[GET_CNT_NUM]).error == EVERYTHING_FINE;
+    return _get(key, keySize, &this->containers[GET_CNT_NUM]).error == EVERYTHING_FINE;
 }
 
 HashTableElementResult HashTable::Get(hashTableKey_t key, size_t keySize)
 {
-    return _get(this, key, keySize, &this->containers[GET_CNT_NUM]);
+    return _get(key, keySize, &this->containers[GET_CNT_NUM]);
 }
 
-HashTableElementResult _get(HashTable* hashTable, hashTableKey_t key, size_t keySize, LinkedList* container)
+HashTableElementResult _get(hashTableKey_t key, size_t keySize, LinkedList* container)
 {
     if (container->length == 1)
         return { nullptr, ERROR_NOT_FOUND };

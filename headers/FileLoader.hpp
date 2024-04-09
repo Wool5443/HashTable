@@ -1,11 +1,18 @@
 #pragma once
 
 #include "HashTable.hpp"
+#include "String.hpp"
 
-struct LoadResult
+struct Loaded
 {
-    char* buffer;
-    ErrorCode error;
+    String      buffer;
+    SplitString split;
 };
 
-LoadResult LoadFileToTable(HashTable* hashTable, const char* filePath);
+struct LoadedResult
+{
+    Loaded      value;
+    ErrorCode   error;
+};
+
+LoadedResult LoadFileToTable(HashTable* hashTable, const char* filePath);

@@ -34,7 +34,7 @@ ErrorCode _dumpHashTableText(HashTable* hashTable, ErrorCode error, const char* 
     {
         LinkedList* listPtr = &hashTable->containers[i];
         ErrorCode   listErr = listPtr->Verify();
-        PRINT_LOG_INDENT(8, "List[%p] condition - %s[%d]\n", ERROR_CODE_NAMES[listErr], listErr);
+        PRINT_LOG_INDENT(8, "List[%p] condition - %s[%d]\n", listPtr, ERROR_CODE_NAMES[listErr], listErr);
         PRINT_LOG_INDENT(8, "{\n");
         PRINT_LOG_INDENT(12, "data[%p]\n",       listPtr->data);
         PRINT_LOG_INDENT(12, "prev[%p]\n",       listPtr->prev);

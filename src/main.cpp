@@ -3,6 +3,7 @@
 #include "PrettyDumpList.hpp"
 #include "DumpHashTable.hpp"
 #include "FileLoader.hpp"
+#include "Hash.hpp"
 
 int main()
 {
@@ -15,21 +16,24 @@ int main()
 
     HashTable table = {};
 
-    RETURN_ERROR(table.Init(101, CalculateHash, logFolder));
+    RETURN_ERROR(table.Init(101, LengthHash, logFolder));
 
-    LoadResult loadRes = LoadFileToTable(&table, wordsPath);
+    LoadedResult loadRes = LoadFileToTable(&table, wordsPath);
     RETURN_ERROR(loadRes.error);
 
     // DumpHashTable(&table, table.Verify(), hashLog);
-
-    const char* word = "Man";
-
-    HashTableElementResult wordRes = table.Get(word, 4);
-    printf("%s: %zu\n", wordRes.value->key, wordRes.value->count);
-
     EndHtmlLogging();
 
-    free(loadRes.buffer);
+    Loaded load = loadRes.value;
+
+    for (size_t i = 0; i < load.split.wordsCount; i++)
+    {
+        HashTableElementResult wordRes = table.Get(load.split.words[i].buf, load.split.words[i].length);
+        printf("%s: %zu\n", wordRes.value->key, wordRes.value->count);
+    }
+
+    load.buffer.Destructor();
+    load.split.Destructor();
     RETURN_ERROR(table.Destructor());
 
     return 0;
