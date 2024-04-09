@@ -25,11 +25,13 @@ set(SOURCES
     "src/DumpHashTable.cpp"
     "src/FileLoader.cpp"
     "src/Hash.cpp"
+    "src/Testing.cpp"
     "headers/HashTable.hpp"
     "headers/DumpHashTable.hpp"
     "headers/HashTableSettings.hpp"
     "headers/FileLoader.hpp"
     "headers/Hash.hpp"
+    "headers/Testing.hpp"
 )
 
 file(MAKE_DIRECTORY "log/LinkedList/")
