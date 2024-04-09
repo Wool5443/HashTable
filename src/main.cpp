@@ -16,7 +16,7 @@ int main()
 
     HashTable table = {};
 
-    RETURN_ERROR(table.Init(101, LengthHash, logFolder));
+    RETURN_ERROR(table.Init(101, CalculateHash, logFolder));
 
     LoadedResult loadRes = LoadFileToTable(&table, wordsPath);
     RETURN_ERROR(loadRes.error);
