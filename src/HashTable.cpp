@@ -5,9 +5,9 @@
 
 static const uint64_t seed = 0xabcfedfabfeacdfd;
 
-#define GET_CNT_NUM this->hashFunc(key, keySize, seed) % this->containersCount
+#define GET_CNT_NUM this->hashFunc(key.buf, key.length, seed) % this->containersCount
 
-HashTableElementResult _get(hashTableKey_t key, size_t keySize, LinkedList* container);
+HashTableElementResult _get(hashTableKey_t key, LinkedList* container);
 
 ErrorCode HashTable::Init(size_t containersCount, hashFunction_t hashFunc, const char* logFolder)
 {
@@ -52,11 +52,11 @@ ErrorCode HashTable::Verify()
     return EVERYTHING_FINE;
 }
 
-ErrorCode HashTable::Add(hashTableKey_t key, size_t keySize)
+ErrorCode HashTable::Add(hashTableKey_t key)
 {
     LinkedList* container = &this->containers[GET_CNT_NUM];
     
-    HashTableElementResult elem = _get(key, keySize, container);
+    HashTableElementResult elem = _get(key, container);
 
     if (elem.error == EVERYTHING_FINE)
     {
@@ -67,11 +67,11 @@ ErrorCode HashTable::Add(hashTableKey_t key, size_t keySize)
     return container->PushBack({ key, 1 });
 }
 
-ErrorCode HashTable::Remove(hashTableKey_t key, size_t keySize)
+ErrorCode HashTable::Remove(hashTableKey_t key)
 {
     LinkedList* container = &this->containers[GET_CNT_NUM];
 
-    HashTableElementResult elem = _get(key, keySize, container);
+    HashTableElementResult elem = _get(key, container);
 
     RETURN_ERROR(elem.error);
 
@@ -80,22 +80,22 @@ ErrorCode HashTable::Remove(hashTableKey_t key, size_t keySize)
     return container->Pop(index).error;
 }
 
-bool HashTable::Contains(hashTableKey_t key, size_t keySize)
+bool HashTable::Contains(hashTableKey_t key)
 {
-    return _get(key, keySize, &this->containers[GET_CNT_NUM]).error == EVERYTHING_FINE;
+    return _get(key, &this->containers[GET_CNT_NUM]).error == EVERYTHING_FINE;
 }
 
-HashTableElementResult HashTable::Get(hashTableKey_t key, size_t keySize)
+HashTableElementResult HashTable::Get(hashTableKey_t key)
 {
-    return _get(key, keySize, &this->containers[GET_CNT_NUM]);
+    return _get(key, &this->containers[GET_CNT_NUM]);
 }
 
-HashTableElementResult _get(hashTableKey_t key, size_t keySize, LinkedList* container)
+HashTableElementResult _get(hashTableKey_t key, LinkedList* container)
 {
     if (container->length == 1)
         return { nullptr, ERROR_NOT_FOUND };
 
-    ListElemIndexResult index = container->Find({ key, keySize });
+    ListElemIndexResult index = container->Find({ key, 0 });
 
     RETURN_ERROR_RESULT(index, nullptr);
 

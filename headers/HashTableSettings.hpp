@@ -1,8 +1,9 @@
 #pragma once
 
 #include "Utils.hpp"
+#include "String.hpp"
 
-typedef const char* hashTableKey_t;
+typedef String hashTableKey_t;
 
 /** @struct HashTableElement
  * @brief Struct for hash table elements

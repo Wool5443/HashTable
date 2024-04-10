@@ -18,12 +18,12 @@ struct HashTable
 
     ErrorCode              Verify();
 
-    ErrorCode              Add(hashTableKey_t key, size_t keySize);
+    ErrorCode              Add(hashTableKey_t key);
 
-    ErrorCode              Remove(hashTableKey_t key, size_t keySize);
+    ErrorCode              Remove(hashTableKey_t key);
 
-    bool                   Contains(hashTableKey_t key, size_t keySize);
+    bool                   Contains(hashTableKey_t key);
 
-    HashTableElementResult Get(hashTableKey_t key, size_t keySize);
+    HashTableElementResult Get(hashTableKey_t key);
 };
 

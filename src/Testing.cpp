@@ -1,6 +1,14 @@
 #include "Testing.hpp"
 #include "FileLoader.hpp"
 #include "Hash.hpp"
+#include "PrettyDumpList.hpp"
+
+#define PRINT_ERROR(hash, error)                                    \
+do                                                                  \
+{                                                                   \
+    ErrorCode _error = error;                                       \
+    printf("%s: %s[%d]\n", hash, ERROR_CODE_NAMES[error], error);   \
+} while (0)
 
 ErrorCode Test(const char* wordsPath, const char* logFolder, const char* resultPath,
                size_t containersCount, hashFunction_t hashFunc)
@@ -19,13 +27,21 @@ ErrorCode Test(const char* wordsPath, const char* logFolder, const char* resultP
     LoadedResult loadRes = LoadFileToTable(&table, wordsPath);
     RETURN_ERROR(loadRes.error);
 
+    // StartHtmlLogging(logFolder);
+    // DumpList(&table.containers[205], EVERYTHING_FINE);
+    // EndHtmlLogging();
+
     Loaded load = loadRes.value;
 
     for (size_t i = 0; i < load.split.wordsCount; i++)
     {
-        HashTableElementResult wordRes = table.Get(load.split.words[i].buf, load.split.words[i].length);
-        RETURN_ERROR(wordRes.error);
-        fprintf(resultFile, "%s: %zu\n", wordRes.value->key, wordRes.value->count);
+        HashTableElementResult wordRes = table.Get(load.split.words[i]);
+        if (wordRes.error)
+        {
+            printf("Utils, i = %zu word = %s\n", i, load.split.words[i].buf);
+            RETURN_ERROR(wordRes.error);
+        }
+        fprintf(resultFile, "%s: %zu\n", wordRes.value->key.buf, wordRes.value->count);
     }
 
     load.buffer.Destructor();

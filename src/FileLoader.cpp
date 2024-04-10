@@ -46,7 +46,7 @@ LoadedResult LoadFileToTable(HashTable* hashTable, const char* filePath)
 
         allignedString.Append(word);
 
-        size_t zeroesCount = (ALLIGNMENT - word->length) % ALLIGNMENT;
+        size_t zeroesCount = ALLIGNMENT - word->length % ALLIGNMENT;
         allignedString.length += zeroesCount;
     }
 
@@ -56,7 +56,7 @@ LoadedResult LoadFileToTable(HashTable* hashTable, const char* filePath)
 
     for (size_t i = 0; i < split.wordsCount; i++)
     {
-        error = hashTable->Add(currentWord, split.words[i].length);
+        error = hashTable->Add({ currentWord, split.words[i].length });
         if (error)
         {
             allignedString.Destructor();
