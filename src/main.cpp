@@ -11,6 +11,11 @@ int main()
     const char* logFolder = "../log/LinkedList";
     const char* wordsPath = "../Words.txt";
 
+    RETURN_ERROR(TestZeroHash(wordsPath, logFolder, "../Results.txt", 211));
+    RETURN_ERROR(TestFirstChar(wordsPath, logFolder, "../Results.txt", 211));
+    RETURN_ERROR(TestLengthHash(wordsPath, logFolder, "../Results.txt", 211));
+    RETURN_ERROR(TestSumHash(wordsPath, logFolder, "../Results.txt", 211));
+    RETURN_ERROR(TestSumLengthHash(wordsPath, logFolder, "../Results.txt", 211));
     RETURN_ERROR(Test(wordsPath, logFolder, "../Results.txt", 211, CalculateHash));
 
     return 0;

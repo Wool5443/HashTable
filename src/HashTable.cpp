@@ -95,10 +95,9 @@ HashTableElementResult _get(hashTableKey_t key, size_t keySize, LinkedList* cont
     if (container->length == 1)
         return { nullptr, ERROR_NOT_FOUND };
 
-    for (size_t i = 1; i < container->length; i++)
-        if (container->prev[i] != SIZET_POISON)
-            if (container->data[i].key && strncmp(container->data[i].key, key, keySize) == 0)
-                return { &container->data[i], EVERYTHING_FINE }; 
+    ListElemIndexResult index = container->Find({ key, keySize });
 
-    return { nullptr, ERROR_NOT_FOUND };
+    RETURN_ERROR_RESULT(index, nullptr);
+
+    return { &container->data[index.value], EVERYTHING_FINE };
 }

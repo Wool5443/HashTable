@@ -1,5 +1,6 @@
 #include "Testing.hpp"
 #include "FileLoader.hpp"
+#include "Hash.hpp"
 
 ErrorCode Test(const char* wordsPath, const char* logFolder, const char* resultPath,
                size_t containersCount, hashFunction_t hashFunc)
@@ -32,4 +33,34 @@ ErrorCode Test(const char* wordsPath, const char* logFolder, const char* resultP
     RETURN_ERROR(table.Destructor());
 
     return EVERYTHING_FINE;
+}
+
+ErrorCode TestZeroHash(const char* wordsPath, const char* logFolder, const char* resultPath,
+                       size_t containersCount)
+{
+    return Test(wordsPath, logFolder, resultPath, containersCount, ZeroHash);
+}
+
+ErrorCode TestFirstChar(const char* wordsPath, const char* logFolder, const char* resultPath,
+                        size_t containersCount)
+{
+    return Test(wordsPath, logFolder, resultPath, containersCount, FirstCharHash);
+}
+
+ErrorCode TestLengthHash(const char* wordsPath, const char* logFolder, const char* resultPath,
+                         size_t containersCount)
+{
+    return Test(wordsPath, logFolder, resultPath, containersCount, LengthHash);
+}
+
+ErrorCode TestSumLengthHash(const char* wordsPath, const char* logFolder, const char* resultPath,
+                            size_t containersCount)
+{
+    return Test(wordsPath, logFolder, resultPath, containersCount, SumLengthHash);
+}
+
+ErrorCode TestSumHash(const char* wordsPath, const char* logFolder, const char* resultPath,
+                      size_t containersCount)
+{
+    return Test(wordsPath, logFolder, resultPath, containersCount, SumHash);
 }
