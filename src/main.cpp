@@ -31,20 +31,20 @@ int main()
 
     const char* pythonResult = "../ResultsPython.txt";
 
-    PRINT_ERROR("Zero", TestZeroHash(wordsPath, logFolder, resultFiles[0], 211));
-    PRINT_ERROR("First Char", TestFirstChar(wordsPath, logFolder, resultFiles[1], 211));
-    PRINT_ERROR("Length", TestLengthHash(wordsPath, logFolder, resultFiles[2], 211));
-    PRINT_ERROR("Sum", TestSumHash(wordsPath, logFolder, resultFiles[3], 211));
+    PRINT_ERROR("Zero",         TestZeroHash(wordsPath, logFolder, resultFiles[0], 211));
+    PRINT_ERROR("First Char",   TestFirstChar(wordsPath, logFolder, resultFiles[1], 211));
+    PRINT_ERROR("Length",       TestLengthHash(wordsPath, logFolder, resultFiles[2], 211));
+    PRINT_ERROR("Sum",          TestSumHash(wordsPath, logFolder, resultFiles[3], 211));
     PRINT_ERROR("Sum / Length", TestSumLengthHash(wordsPath, logFolder, resultFiles[4], 211));
-    PRINT_ERROR("Utils", Test(wordsPath, logFolder, resultFiles[5], 211, CalculateHash));
+    PRINT_ERROR("Utils",        Test(wordsPath, logFolder, resultFiles[5], 211, CalculateHash));
 
     char command[128] = "";
     for (size_t i = 0; i < hashCount; i++)
     {
-        printf("%s:\n\n", resultFiles[i]);
-        fflush(stdout);
+        printf ("%s:\n\n", resultFiles[i]);
+        fflush (stdout);
         sprintf(command, "diff %s %s", pythonResult, resultFiles[i]);
-        system(command);
+        system (command);
     }
 
     return 0;
