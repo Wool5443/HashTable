@@ -21,22 +21,22 @@ int main()
     size_t      hashCount     = 6;
     const char* resultFiles[] = 
     {
-        "../ResultsZero.txt",
-        "../ResultsFirstChar.txt",
-        "../ResultsLength.txt",
-        "../ResultsSum.txt",
-        "../ResultsSumLength.txt",
-        "../ResultsUtils.txt",
+        "../Results/ResultsZero.txt",
+        "../Results/ResultsFirstChar.txt",
+        "../Results/ResultsLength.txt",
+        "../Results/ResultsSum.txt",
+        "../Results/ResultsSumLength.txt",
+        "../Results/ResultsUtils.txt",
     };
 
     const char* containerDataFiles[] = 
     {
-        "../ContainersZero.txt",
-        "../ContainersFirstChar.txt",
-        "../ContainersLength.txt",
-        "../ContainersSum.txt",
-        "../ContainersSumLength.txt",
-        "../ContainersUtils.txt",
+        "../Containers/ContainersZero.txt",
+        "../Containers/ContainersFirstChar.txt",
+        "../Containers/ContainersLength.txt",
+        "../Containers/ContainersSum.txt",
+        "../Containers/ContainersSumLength.txt",
+        "../Containers/ContainersUtils.txt",
     };
 
     const char* pythonResult = "../ResultsPython.txt";
@@ -47,15 +47,6 @@ int main()
     PRINT_ERROR("Sum\t\t",          TestSumHash      (wordsPath, logFolder, resultFiles[3], containerDataFiles[3], 211));
     PRINT_ERROR("Sum / Length\t\t", TestSumLengthHash(wordsPath, logFolder, resultFiles[4], containerDataFiles[4], 211));
     PRINT_ERROR("Utils\t\t",        Test             (wordsPath, logFolder, resultFiles[5], containerDataFiles[5], 211, CalculateHash));
-
-    // char command[128] = "";
-    // for (size_t i = 0; i < hashCount; i++)
-    // {
-    //     printf ("%s:\n\n", resultFiles[i]);
-    //     fflush (stdout);
-    //     sprintf(command, "diff %s %s", pythonResult, resultFiles[i]);
-    //     system (command);
-    // }
 
     return 0;
 }
