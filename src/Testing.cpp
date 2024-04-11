@@ -10,8 +10,10 @@ do                                                                  \
     printf("%s: %s[%d]\n", hash, ERROR_CODE_NAMES[error], error);   \
 } while (0)
 
+ErrorCode _printContainerSizes(HashTable* hashTable, const char* outTextPath);
+
 ErrorCode Test(const char* wordsPath, const char* logFolder, const char* resultPath,
-               size_t containersCount, hashFunction_t hashFunc)
+               const char* containersDataPath, size_t containersCount, hashFunction_t hashFunc)
 {
     MyAssertSoft(wordsPath,  ERROR_NULLPTR);
     MyAssertSoft(logFolder,  ERROR_NULLPTR);
@@ -27,10 +29,6 @@ ErrorCode Test(const char* wordsPath, const char* logFolder, const char* resultP
     LoadedResult loadRes = LoadFileToTable(&table, wordsPath);
     RETURN_ERROR(loadRes.error);
 
-    // StartHtmlLogging(logFolder);
-    // DumpList(&table.containers[205], EVERYTHING_FINE);
-    // EndHtmlLogging();
-
     Loaded load = loadRes.value;
 
     for (size_t i = 0; i < load.split.wordsCount; i++)
@@ -44,6 +42,8 @@ ErrorCode Test(const char* wordsPath, const char* logFolder, const char* resultP
         fprintf(resultFile, "%s: %zu\n", wordRes.value->key.buf, wordRes.value->count);
     }
 
+    RETURN_ERROR(_printContainerSizes(&table, containersDataPath));
+
     load.buffer.Destructor();
     load.split. Destructor();
     RETURN_ERROR(table.Destructor());
@@ -52,31 +52,45 @@ ErrorCode Test(const char* wordsPath, const char* logFolder, const char* resultP
 }
 
 ErrorCode TestZeroHash(const char* wordsPath, const char* logFolder, const char* resultPath,
-                       size_t containersCount)
+                       const char* containersDataPath, size_t containersCount)
 {
-    return Test(wordsPath, logFolder, resultPath, containersCount, ZeroHash);
+    return Test(wordsPath, logFolder, resultPath, containersDataPath, containersCount, ZeroHash);
 }
 
 ErrorCode TestFirstChar(const char* wordsPath, const char* logFolder, const char* resultPath,
-                        size_t containersCount)
+                        const char* containersDataPath, size_t containersCount)
 {
-    return Test(wordsPath, logFolder, resultPath, containersCount, FirstCharHash);
+    return Test(wordsPath, logFolder, resultPath, containersDataPath, containersCount, FirstCharHash);
 }
 
 ErrorCode TestLengthHash(const char* wordsPath, const char* logFolder, const char* resultPath,
-                         size_t containersCount)
+                         const char* containersDataPath, size_t containersCount)
 {
-    return Test(wordsPath, logFolder, resultPath, containersCount, LengthHash);
+    return Test(wordsPath, logFolder, resultPath, containersDataPath, containersCount, LengthHash);
 }
 
 ErrorCode TestSumLengthHash(const char* wordsPath, const char* logFolder, const char* resultPath,
-                            size_t containersCount)
+                            const char* containersDataPath, size_t containersCount)
 {
-    return Test(wordsPath, logFolder, resultPath, containersCount, SumLengthHash);
+    return Test(wordsPath, logFolder, resultPath, containersDataPath, containersCount, SumLengthHash);
 }
 
 ErrorCode TestSumHash(const char* wordsPath, const char* logFolder, const char* resultPath,
-                      size_t containersCount)
+                      const char* containersDataPath, size_t containersCount)
 {
-    return Test(wordsPath, logFolder, resultPath, containersCount, SumHash);
+    return Test(wordsPath, logFolder, resultPath, containersDataPath, containersCount, SumHash);
+}
+
+ErrorCode _printContainerSizes(HashTable* hashTable, const char* outTextPath)
+{
+    MyAssertSoft(hashTable,   ERROR_NULLPTR);
+    MyAssertSoft(outTextPath, ERROR_BAD_FILE);
+
+    FILE* outTextFile = fopen(outTextPath, "wb");
+    if (!outTextFile) return ERROR_BAD_FILE;
+
+    for (size_t i = 0; i < hashTable->containersCount; i++)
+        fprintf(outTextFile, "container[%zu]: %zu\n", i, hashTable->containers[i].length - 1);
+
+    return EVERYTHING_FINE;
 }
