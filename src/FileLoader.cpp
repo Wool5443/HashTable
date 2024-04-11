@@ -1,6 +1,7 @@
+#include <string.h>
 #include "FileLoader.hpp"
 
-static const size_t ALLIGNMENT = 8;
+static const size_t ALLIGNMENT = 64;
 
 LoadedResult LoadFileToTable(HashTable* hashTable, const char* filePath)
 {
@@ -53,10 +54,11 @@ LoadedResult LoadFileToTable(HashTable* hashTable, const char* filePath)
     unallignedString.Destructor();
 
     char* currentWord = allignedString.buf;
-
+    size_t k = 0;
     for (size_t i = 0; i < split.wordsCount; i++)
     {
         error = hashTable->Add({ currentWord, split.words[i].length });
+
         if (error)
         {
             allignedString.Destructor();
@@ -68,7 +70,7 @@ LoadedResult LoadFileToTable(HashTable* hashTable, const char* filePath)
         split.words[i].buf = currentWord;
 
         size_t length = split.words[i].length;
-        currentWord += ALLIGNMENT * (length / ALLIGNMENT + ((length % ALLIGNMENT) ? 1 : 0));
+        currentWord += length + (ALLIGNMENT - length % ALLIGNMENT);
     }
 
     return { {allignedString, split}, EVERYTHING_FINE };
