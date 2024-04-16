@@ -31,12 +31,12 @@ int main()
 
     const char* containerDataFiles[] = 
     {
-        "../Containers/ContainersZero.txt",
-        "../Containers/ContainersFirstChar.txt",
-        "../Containers/ContainersLength.txt",
-        "../Containers/ContainersSum.txt",
-        "../Containers/ContainersSumLength.txt",
-        "../Containers/ContainersUtils.txt",
+        "../Containers/ContainersZero.csv",
+        "../Containers/ContainersFirstChar.csv",
+        "../Containers/ContainersLength.csv",
+        "../Containers/ContainersSum.csv",
+        "../Containers/ContainersSumLength.csv",
+        "../Containers/ContainersUtils.csv",
     };
 
     const char* pythonResult = "../ResultsPython.txt";

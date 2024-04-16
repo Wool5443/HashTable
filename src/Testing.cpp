@@ -89,8 +89,22 @@ ErrorCode _printContainerSizes(HashTable* hashTable, const char* outTextPath)
     FILE* outTextFile = fopen(outTextPath, "wb");
     if (!outTextFile) return ERROR_BAD_FILE;
 
+    size_t sumLength        = 0;
+    size_t filledContainers = 0;
+
     for (size_t i = 0; i < hashTable->containersCount; i++)
-        fprintf(outTextFile, "%zu\t%zu\n", i, hashTable->containers[i].length - 1);
+    {
+        size_t length = hashTable->containers[i].length;
+        fprintf(outTextFile, "%zu\t%zu\n", i, length - 1);
+        if (length > 1)
+        {
+            sumLength += length;
+            filledContainers++;
+        }
+    }
+
+    double loadFactor = (double)sumLength / (double)filledContainers;
+    fprintf(outTextFile, "%lg\t%lg", loadFactor, loadFactor);
 
     return EVERYTHING_FINE;
 }
