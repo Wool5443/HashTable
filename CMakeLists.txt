@@ -38,6 +38,8 @@ file(MAKE_DIRECTORY "log/LinkedList/")
 file(MAKE_DIRECTORY "log/LinkedList/txt")
 file(MAKE_DIRECTORY "log/LinkedList/dot")
 file(MAKE_DIRECTORY "log/LinkedList/img")
+file(MAKE_DIRECTORY "Containers/")
+file(MAKE_DIRECTORY "Results/")
 
 include_directories(headers LinkedList/headers LinkedList/Utils String/headers)
 
