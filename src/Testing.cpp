@@ -90,7 +90,7 @@ ErrorCode _printContainerSizes(HashTable* hashTable, const char* outTextPath)
     if (!outTextFile) return ERROR_BAD_FILE;
 
     for (size_t i = 0; i < hashTable->containersCount; i++)
-        fprintf(outTextFile, "container[%zu]: %zu\n", i, hashTable->containers[i].length - 1);
+        fprintf(outTextFile, "%zu\t%zu\n", i, hashTable->containers[i].length - 1);
 
     return EVERYTHING_FINE;
 }
