@@ -39,8 +39,6 @@ int main()
         "../Containers/ContainersUtils.csv",
     };
 
-    const char* pythonResult = "../ResultsPython.txt";
-
     size_t containersCount = 5113;
 
     PRINT_ERROR("Zero\t\t",         TestZeroHash     (wordsPath, logFolder, resultFiles[0], containerDataFiles[0], containersCount));
