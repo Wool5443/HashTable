@@ -3,3 +3,5 @@ build/
 log/
 Results/
 *.csv
+perf.data
+perf.data.old
