@@ -46,7 +46,7 @@ int main()
     PRINT_ERROR("Length\t\t",       TestLengthHash   (wordsPath, logFolder, resultFiles[2], containerDataFiles[2], containersCount));
     PRINT_ERROR("Sum\t\t",          TestSumHash      (wordsPath, logFolder, resultFiles[3], containerDataFiles[3], containersCount));
     PRINT_ERROR("Sum / Length\t\t", TestSumLengthHash(wordsPath, logFolder, resultFiles[4], containerDataFiles[4], containersCount));
-    PRINT_ERROR("Utils\t\t",        Test             (wordsPath, logFolder, resultFiles[5], containerDataFiles[5], containersCount, CalculateHash));
+    PRINT_ERROR("MurMur\t\t",       TestMurMur       (wordsPath, logFolder, resultFiles[4], containerDataFiles[4], containersCount));
 
     return 0;
 }

@@ -18,3 +18,6 @@ ErrorCode TestSumLengthHash(const char* wordsPath, const char* logFolder, const 
 
 ErrorCode TestSumHash(const char* wordsPath, const char* logFolder, const char* resultPath,
                       const char* containersDataPath, size_t containersCount);
+
+ErrorCode TestMurMur(const char* wordsPath, const char* logFolder, const char* resultPath,
+                      const char* containersDataPath, size_t containersCount);
