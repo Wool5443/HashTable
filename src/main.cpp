@@ -15,38 +15,15 @@ do                                                                  \
 
 int main()
 {
-    const char* logFolder = "../log/LinkedList";
-    const char* wordsPath = "../Words.txt";
+    const char* logFolder      = "../log/LinkedList";
+    const char* wordsPath      = "../Words.txt";
 
-    size_t      hashCount     = 6;
-    const char* resultFiles[] = 
-    {
-        "../Results/ResultsZero.txt",
-        "../Results/ResultsFirstChar.txt",
-        "../Results/ResultsLength.txt",
-        "../Results/ResultsSum.txt",
-        "../Results/ResultsSumLength.txt",
-        "../Results/ResultsUtils.txt",
-    };
-
-    const char* containerDataFiles[] = 
-    {
-        "../Containers/ContainersZero.csv",
-        "../Containers/ContainersFirstChar.csv",
-        "../Containers/ContainersLength.csv",
-        "../Containers/ContainersSum.csv",
-        "../Containers/ContainersSumLength.csv",
-        "../Containers/ContainersUtils.csv",
-    };
+    const char* containersPath = "../Containers/ContainersUtils.csv";
+    const char* resultPath     = "../Results/ResultsUtils.txt";
 
     size_t containersCount = 5113;
 
-    PRINT_ERROR("Zero\t\t",         TestZeroHash     (wordsPath, logFolder, resultFiles[0], containerDataFiles[0], containersCount));
-    PRINT_ERROR("First Char\t\t",   TestFirstChar    (wordsPath, logFolder, resultFiles[1], containerDataFiles[1], containersCount));
-    PRINT_ERROR("Length\t\t",       TestLengthHash   (wordsPath, logFolder, resultFiles[2], containerDataFiles[2], containersCount));
-    PRINT_ERROR("Sum\t\t",          TestSumHash      (wordsPath, logFolder, resultFiles[3], containerDataFiles[3], containersCount));
-    PRINT_ERROR("Sum / Length\t\t", TestSumLengthHash(wordsPath, logFolder, resultFiles[4], containerDataFiles[4], containersCount));
-    PRINT_ERROR("MurMur\t\t",       TestMurMur       (wordsPath, logFolder, resultFiles[4], containerDataFiles[4], containersCount));
+    PRINT_ERROR("MurMur\t\t", Test(wordsPath, logFolder, resultPath, containersPath, containersCount, CalculateHash));
 
     return 0;
 }
