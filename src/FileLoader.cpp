@@ -13,47 +13,49 @@ LoadedResult LoadFileToTable(HashTable* hashTable, const char* filePath)
 
     size_t fileSize = GetFileSize(filePath);
 
-    String unallignedString = {};
-    ErrorCode error = unallignedString.Create(fileSize + 1);
+    String unalignedString = {};
+    ErrorCode error = unalignedString.Create(fileSize + 1);
     if (error)
     {
         fclose(inputFile);
         return { {}, error };
     }
 
-    if (fread(unallignedString.buf, 1, fileSize, inputFile) != fileSize)
+    if (fread(unalignedString.buf, 1, fileSize, inputFile) != fileSize)
     {
         fclose(inputFile);
-        unallignedString.Destructor();
+        unalignedString.Destructor();
         return { {}, ERROR_BAD_FILE };
     }
     fclose(inputFile);
-    unallignedString.length = fileSize;
+    unalignedString.length = fileSize;
 
-    SplitStringResult splitRes = unallignedString.Split("\n");
+    SplitStringResult splitRes = unalignedString.Split("\n");
     if (splitRes.error)
     {
-        unallignedString.Destructor();
+        unalignedString.Destructor();
         return { {}, splitRes.error };
     }
     SplitString split = splitRes.value;
 
-    String allignedString = {};
-    allignedString.Create(fileSize);
+    String alignedString = {};
+    alignedString.capacity  = fileSize + ALLIGNMENT - (fileSize % ALLIGNMENT);
+    alignedString.buf       = (char*)aligned_alloc(ALLIGNMENT, alignedString.capacity);
+    alignedString.allocated = true;
 
     for (size_t i = 0; i < split.wordsCount; i++)
     {
         String* word = &split.words[i];
 
-        allignedString.Append(word);
+        alignedString.Append(word);
 
         size_t zeroesCount = ALLIGNMENT - word->length % ALLIGNMENT;
-        allignedString.length += zeroesCount;
+        alignedString.length += zeroesCount;
     }
 
-    unallignedString.Destructor();
+    unalignedString.Destructor();
 
-    char* currentWord = allignedString.buf;
+    char* currentWord = alignedString.buf;
     size_t k = 0;
     for (size_t i = 0; i < split.wordsCount; i++)
     {
@@ -61,7 +63,7 @@ LoadedResult LoadFileToTable(HashTable* hashTable, const char* filePath)
 
         if (error)
         {
-            allignedString.Destructor();
+            alignedString.Destructor();
             split.Destructor();
             return { {}, error };
         }
@@ -73,5 +75,5 @@ LoadedResult LoadFileToTable(HashTable* hashTable, const char* filePath)
         currentWord += length + (ALLIGNMENT - length % ALLIGNMENT);
     }
 
-    return { {allignedString, split}, EVERYTHING_FINE };
+    return { {alignedString, split}, EVERYTHING_FINE };
 }
