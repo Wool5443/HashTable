@@ -1,7 +1,12 @@
 cmake_minimum_required(VERSION 3.5)
 set(projectName "HashTable")
 
-project(${projectName} CXX)
+set(CMAKE_NASM_LINK_EXECUTABLE "ld <LINK_FLAGS> <OBJECTS> -o <TARGET> <LINK_LIBRARIES>")
+set(CAN_USE_ASSEMBLER TRUE)
+set(CMAKE_ASM_NASM_OBJECT_FORMAT elf64)
+
+enable_language(ASM_NASM)
+project(${projectName} CXX ASM_NASM)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED true)
@@ -34,8 +39,10 @@ set(SOURCES
     "headers/Hash.hpp"
     "headers/Testing.hpp"
     "headers/StrcmpAVX512.hpp"
+    "src/StrcmpAsm.asm"
 )
 
+file(MAKE_DIRECTORY "log/")
 file(MAKE_DIRECTORY "log/LinkedList/")
 file(MAKE_DIRECTORY "log/LinkedList/txt")
 file(MAKE_DIRECTORY "log/LinkedList/dot")
