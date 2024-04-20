@@ -22,8 +22,8 @@ struct HashTable
 
     ErrorCode              Remove(hashTableKey_t key);
 
-    bool                   Contains(hashTableKey_t key);
+    bool                   Contains(hashTableKey_t key) const;
 
-    HashTableElementResult Get(hashTableKey_t key);
+    HashTableElementResult Get(hashTableKey_t key) const;
 };
 

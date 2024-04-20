@@ -80,12 +80,12 @@ ErrorCode HashTable::Remove(hashTableKey_t key)
     return container->Pop(index).error;
 }
 
-bool HashTable::Contains(hashTableKey_t key)
+bool HashTable::Contains(hashTableKey_t key) const
 {
     return _get(key, &this->containers[GET_CNT_NUM]).error == EVERYTHING_FINE;
 }
 
-HashTableElementResult HashTable::Get(hashTableKey_t key)
+HashTableElementResult HashTable::Get(hashTableKey_t key) const
 {
     return _get(key, &this->containers[GET_CNT_NUM]);
 }
