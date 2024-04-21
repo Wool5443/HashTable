@@ -32,6 +32,7 @@ set(SOURCES
     "src/Hash.cpp"
     "src/Testing.cpp"
     "src/StrcmpAVX512.cpp"
+    "src/CRC32.asm"
     "headers/HashTable.hpp"
     "headers/DumpHashTable.hpp"
     "headers/HashTableSettings.hpp"

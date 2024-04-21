@@ -15,15 +15,15 @@ do                                                                  \
 
 int main()
 {
-    const char* logFolder      = "../log/LinkedList";
+    CRC32const char* logFolder      = "../log/LinkedList";
     const char* wordsPath      = "../Words.txt";
 
-    const char* containersPath = "../Containers/ContainersUtils.csv";
-    const char* resultPath     = "../Results/ResultsUtils.txt";
+    const char* containersPath = "../Containers/ContainersCRC32.csv";
+    const char* resultPath     = "../Results/ResultsCRC32.txt";
 
     size_t containersCount = 5113;
 
-    PRINT_ERROR("MurMur\t\t", Test(wordsPath, logFolder, resultPath, containersPath, containersCount, CalculateHash));
+    PRINT_ERROR("CRC32\t\t", Test(wordsPath, logFolder, resultPath, containersPath, containersCount, CRC32));
 
     return 0;
 }
