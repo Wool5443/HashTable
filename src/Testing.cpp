@@ -51,42 +51,6 @@ ErrorCode Test(const char* wordsPath, const char* logFolder, const char* resultP
     return EVERYTHING_FINE;
 }
 
-ErrorCode TestZeroHash(const char* wordsPath, const char* logFolder, const char* resultPath,
-                       const char* containersDataPath, size_t containersCount)
-{
-    return Test(wordsPath, logFolder, resultPath, containersDataPath, containersCount, ZeroHash);
-}
-
-ErrorCode TestFirstChar(const char* wordsPath, const char* logFolder, const char* resultPath,
-                        const char* containersDataPath, size_t containersCount)
-{
-    return Test(wordsPath, logFolder, resultPath, containersDataPath, containersCount, FirstCharHash);
-}
-
-ErrorCode TestLengthHash(const char* wordsPath, const char* logFolder, const char* resultPath,
-                         const char* containersDataPath, size_t containersCount)
-{
-    return Test(wordsPath, logFolder, resultPath, containersDataPath, containersCount, LengthHash);
-}
-
-ErrorCode TestSumLengthHash(const char* wordsPath, const char* logFolder, const char* resultPath,
-                            const char* containersDataPath, size_t containersCount)
-{
-    return Test(wordsPath, logFolder, resultPath, containersDataPath, containersCount, SumLengthHash);
-}
-
-ErrorCode TestSumHash(const char* wordsPath, const char* logFolder, const char* resultPath,
-                      const char* containersDataPath, size_t containersCount)
-{
-    return Test(wordsPath, logFolder, resultPath, containersDataPath, containersCount, SumHash);
-}
-
-ErrorCode TestMurMur(const char* wordsPath, const char* logFolder, const char* resultPath,
-                      const char* containersDataPath, size_t containersCount)
-{
-    return Test(wordsPath, logFolder, resultPath, containersDataPath, containersCount, CalculateHash);
-}
-
 ErrorCode _printContainerSizes(HashTable* hashTable, const char* outTextPath)
 {
     MyAssertSoft(hashTable,   ERROR_NULLPTR);

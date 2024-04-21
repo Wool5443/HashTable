@@ -39,9 +39,7 @@ LoadedResult LoadFileToTable(HashTable* hashTable, const char* filePath)
     SplitString split = splitRes.value;
 
     String alignedString = {};
-    alignedString.capacity  = fileSize + ALLIGNMENT - (fileSize % ALLIGNMENT);
-    alignedString.buf       = (char*)aligned_alloc(ALLIGNMENT, alignedString.capacity);
-    alignedString.allocated = true;
+    alignedString.Create(fileSize);
 
     for (size_t i = 0; i < split.wordsCount; i++)
     {

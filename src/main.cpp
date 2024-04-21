@@ -15,15 +15,62 @@ do                                                                  \
 
 int main()
 {
-    CRC32const char* logFolder      = "../log/LinkedList";
-    const char* wordsPath      = "../Words.txt";
+    int hashCount = 7;
 
-    const char* containersPath = "../Containers/ContainersCRC32.csv";
-    const char* resultPath     = "../Results/ResultsCRC32.txt";
+    const char* resultDataFiles[] =
+    {
+        "../Results/ResultsZero.txt",
+        "../Results/ResultsFirstChar.txt",
+        "../Results/ResultsLength.txt",
+        "../Results/ResultsSumLength.txt",
+        "../Results/ResultsSum.txt",
+        "../Results/ResultsMurMur.txt",
+        "../Results/ResultsCRC32.txt",
+    };
+
+    const char* containerDataFiles[] =
+    {
+        "../Containers/ContainersZero.csv",
+        "../Containers/ContainersFirstChar.csv",
+        "../Containers/ContainersLength.csv",
+        "../Containers/ContainersSumLength.csv",
+        "../Containers/ContainersSum.csv",
+        "../Containers/ContainersMurMur.csv",
+        "../Containers/ContainersCRC32.csv",
+    };
+
+    const char* hashNames[] =
+    {
+        "Zero",
+        "Length",
+        "FirtChar",
+        "SumLength",
+        "Sum",
+        "MurMur",
+        "CRC32", 
+    };
+
+    const hashFunction_t hashFunctions[] =
+    {
+        ZeroHash,
+        LengthHash,
+        FirstCharHash,
+        SumLengthHash,
+        SumHash,
+        CalculateHash,
+        CRC32,
+    };
+    
+    const char* logFolder      = "../log/LinkedList";
+    const char* wordsPath      = "../Words.txt";
 
     size_t containersCount = 5113;
 
-    PRINT_ERROR("CRC32\t\t", Test(wordsPath, logFolder, resultPath, containersPath, containersCount, CRC32));
+    for (int i = 0; i < hashCount; i++)
+    {
+        PRINT_ERROR(hashNames[i], Test(wordsPath, logFolder, resultDataFiles[i],
+                                       containerDataFiles[i], containersCount, hashFunctions[i]));
+    }
 
     return 0;
 }
