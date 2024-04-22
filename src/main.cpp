@@ -1,5 +1,4 @@
 #include <stdio.h>
-#include <intrin.h>
 #include "HashTable.hpp"
 #include "PrettyDumpList.hpp"
 #include "DumpHashTable.hpp"
@@ -69,10 +68,14 @@ int main()
     }
     #else
 
-    uint64_t startTicks = __rdtsc();
+    uint64_t startTicks = GetCPUTicks();
+    for (int i = 0; i < 100; i++)
+    PRINT_ERROR("MurMur", Test(wordsPath, logFolder, resultFiles[5], containerDataFiles[5], containersCount,
+                              CalculateHash));
 
-    PRINT_ERROR("CRC32", Test(wordsPath, logFolder, resultFiles[6], containerDataFiles[6], containersCount,
-                              CRC32));
+    uint64_t endTicks = GetCPUTicks();
+
+    printf("It took: %llu ticks\n", endTicks - startTicks);
     #endif
 
     return 0;

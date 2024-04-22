@@ -3,6 +3,12 @@
 #include "Hash.hpp"
 #include "PrettyDumpList.hpp"
 
+#ifdef NEMIT_DATA
+#define ON_EMIT(...) (void)0
+#else
+#define ON_EMIT(...) __VA_ARGS__
+#endif
+
 #define PRINT_ERROR(hash, error)                                    \
 do                                                                  \
 {                                                                   \
@@ -39,10 +45,9 @@ ErrorCode Test(const char* wordsPath, const char* logFolder, const char* resultP
             printf("Utils, i = %zu word = %s\n", i, load.split.words[i].buf);
             RETURN_ERROR(wordRes.error);
         }
-        fprintf(resultFile, "%s: %zu\n", wordRes.value->key.buf, wordRes.value->count);
+        ON_EMIT(fprintf(resultFile, "%s: %zu\n", wordRes.value->key.buf, wordRes.value->count));
     }
-
-    RETURN_ERROR(_printContainerSizes(&table, containersDataPath));
+    ON_EMIT(RETURN_ERROR(_printContainerSizes(&table, containersDataPath)));
 
     load.buffer.Destructor();
     load.split. Destructor();
