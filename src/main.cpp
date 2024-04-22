@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <intrin.h>
 #include "HashTable.hpp"
 #include "PrettyDumpList.hpp"
 #include "DumpHashTable.hpp"
@@ -16,8 +17,7 @@ do                                                                  \
 int main()
 {
     int hashCount = 7;
-
-    const char* resultDataFiles[] =
+    const char* resultFiles[] =
     {
         "../Results/ResultsZero.txt",
         "../Results/ResultsFirstChar.txt",
@@ -27,7 +27,6 @@ int main()
         "../Results/ResultsMurMur.txt",
         "../Results/ResultsCRC32.txt",
     };
-
     const char* containerDataFiles[] =
     {
         "../Containers/ContainersZero.csv",
@@ -38,7 +37,6 @@ int main()
         "../Containers/ContainersMurMur.csv",
         "../Containers/ContainersCRC32.csv",
     };
-
     const char* hashNames[] =
     {
         "Zero",
@@ -49,7 +47,6 @@ int main()
         "MurMur",
         "CRC32", 
     };
-
     const hashFunction_t hashFunctions[] =
     {
         ZeroHash,
@@ -60,17 +57,23 @@ int main()
         CalculateHash,
         CRC32,
     };
-    
-    const char* logFolder      = "../log/LinkedList";
-    const char* wordsPath      = "../Words.txt";
-
+    const char* wordsPath  = "../Words.txt";
+    const char* logFolder  = "../log/LinkedList";
     size_t containersCount = 5113;
 
+    #ifdef TEST_ALL
     for (int i = 0; i < hashCount; i++)
     {
-        PRINT_ERROR(hashNames[i], Test(wordsPath, logFolder, resultDataFiles[i],
+        PRINT_ERROR(hashNames[i], Test(wordsPath, logFolder, resultFiles[i],
                                        containerDataFiles[i], containersCount, hashFunctions[i]));
     }
+    #else
+
+    uint64_t startTicks = __rdtsc();
+
+    PRINT_ERROR("CRC32", Test(wordsPath, logFolder, resultFiles[6], containerDataFiles[6], containersCount,
+                              CRC32));
+    #endif
 
     return 0;
 }
