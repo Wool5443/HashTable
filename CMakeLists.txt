@@ -51,6 +51,7 @@ file(MAKE_DIRECTORY "log/LinkedList/dot")
 file(MAKE_DIRECTORY "log/LinkedList/img")
 file(MAKE_DIRECTORY "Containers/")
 file(MAKE_DIRECTORY "Results/")
+file(MAKE_DIRECTORY "Timings/")
 
 include_directories(headers LinkedList/headers LinkedList/Utils String/headers)
 

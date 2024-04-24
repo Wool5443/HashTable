@@ -18,25 +18,29 @@ do                                                                  \
 
 ErrorCode _printContainerSizes(HashTable* hashTable, const char* outTextPath);
 
-ErrorCode Test(const char* wordsPath, const char* logFolder, const char* resultPath,
-               const char* containersDataPath, size_t containersCount, hashFunction_t hashFunc)
+ErrorCode Test(TestContext* context)
 {
-    MyAssertSoft(wordsPath,  ERROR_NULLPTR);
-    MyAssertSoft(logFolder,  ERROR_NULLPTR);
-    MyAssertSoft(resultPath, ERROR_NULLPTR);
+    MyAssertSoft(context, ERROR_NULLPTR);
 
-    FILE* resultFile = fopen(resultPath, "wb");
-    if (!resultFile) return ERROR_BAD_FILE;
+    ON_EMIT(
+            FILE* resultFile = fopen(context->resultPath, "wb");
+            if (!resultFile) return ERROR_BAD_FILE;
+           );
 
     HashTable table = {};
 
-    RETURN_ERROR(table.Init(containersCount, hashFunc, logFolder));
+    RETURN_ERROR(table.Init(context->containersCount, context->hashFunction, context->logFolder));
 
-    LoadedResult loadRes = LoadFileToTable(&table, wordsPath);
+    Timer timer = {};
+
+    timer.Start();
+    LoadedResult loadRes = LoadFileToTable(&table, context->wordsPath);
+    uint64_t loadDuration = timer.Stop();
     RETURN_ERROR(loadRes.error);
 
     Loaded load = loadRes.value;
 
+    timer.Start();
     for (size_t i = 0; i < load.split.wordsCount; i++)
     {
         HashTableElementResult wordRes = table.Get(load.split.words[i]);
@@ -47,7 +51,16 @@ ErrorCode Test(const char* wordsPath, const char* logFolder, const char* resultP
         }
         ON_EMIT(fprintf(resultFile, "%s: %zu\n", wordRes.value->key.buf, wordRes.value->count));
     }
-    ON_EMIT(RETURN_ERROR(_printContainerSizes(&table, containersDataPath)));
+    ON_EMIT(puts("EMMITED!!!"));
+    ON_EMIT(RETURN_ERROR(_printContainerSizes(&table, context->containersDataPath)));
+    uint64_t hashOperationDuration = timer.Stop();
+
+    FILE* timingFile = fopen(context->timingPath, "wb");
+    if (!timingFile) return ERROR_BAD_FILE;
+
+    fprintf(timingFile, "\"%s - load\"\t%llu\n", context->hashName, loadDuration);
+    fprintf(timingFile, "\"%s - operations\"\t%llu\n", context->hashName, hashOperationDuration);
+    fprintf(timingFile, "\"%s - sum\"\t%llu\n", context->hashName, loadDuration + hashOperationDuration);
 
     load.buffer.Destructor();
     load.split. Destructor();
