@@ -16,6 +16,12 @@ do                                                                  \
     printf("%s: %s[%d]\n", hash, ERROR_CODE_NAMES[error], error);   \
 } while (0)
 
+#ifdef FINAL_TESTING
+#define ON_FINAL_TEST(...) __VA_ARGS__
+#else
+#define ON_FINAL_TEST(...) (void)0
+#endif
+
 ErrorCode _printContainerSizes(HashTable* hashTable, const char* outTextPath);
 
 ErrorCode Test(TestContext* context)
@@ -27,14 +33,20 @@ ErrorCode Test(TestContext* context)
             if (!resultFile) return ERROR_BAD_FILE;
            );
 
-    HashTable table = {};
+    ON_FINAL_TEST(
+    FILE* timingFile = fopen(context->timingPath, "ab");
+    if (!timingFile) return ERROR_BAD_FILE;
+    fprintf(timingFile, "\"Load\"\t\"Hash operations\"\t\"All\"\n");
+    for (int i = 0; i < FINAL_TESTING; i++) {
+    );
 
+    HashTable table = {};
     RETURN_ERROR(table.Init(context->containersCount, context->hashFunction, context->logFolder));
 
     Timer timer = {};
 
     timer.Start();
-    LoadedResult loadRes = LoadFileToTable(&table, context->wordsPath);
+    LoadedResult loadRes  = LoadFileToTable(&table, context->wordsPath);
     uint64_t loadDuration = timer.Stop();
     RETURN_ERROR(loadRes.error);
 
@@ -51,20 +63,29 @@ ErrorCode Test(TestContext* context)
         }
         ON_EMIT(fprintf(resultFile, "%s: %zu\n", wordRes.value->key.buf, wordRes.value->count));
     }
-    ON_EMIT(puts("EMMITED!!!"));
-    ON_EMIT(RETURN_ERROR(_printContainerSizes(&table, context->containersDataPath)));
     uint64_t hashOperationDuration = timer.Stop();
 
+    ON_EMIT(puts("EMMITED!!!"));
+    ON_EMIT(fclose(resultFile));
+    ON_EMIT(RETURN_ERROR(_printContainerSizes(&table, context->containersDataPath)));
+
+    #ifdef FINAL_TESTING
+    fprintf(timingFile, "%lu\t%lu\t%lu\n", loadDuration, hashOperationDuration, loadDuration + hashOperationDuration);
+    fflush(timingFile);
+    #else
     FILE* timingFile = fopen(context->timingPath, "wb");
     if (!timingFile) return ERROR_BAD_FILE;
-
     fprintf(timingFile, "\"%s - load\"\t%llu\n", context->hashName, loadDuration);
     fprintf(timingFile, "\"%s - operations\"\t%llu\n", context->hashName, hashOperationDuration);
     fprintf(timingFile, "\"%s\"\t%llu\n", context->hashName, loadDuration + hashOperationDuration);
+    fclose(timingFile);
+    #endif
 
     load.buffer.Destructor();
     load.split. Destructor();
     RETURN_ERROR(table.Destructor());
+
+    ON_FINAL_TEST(});
 
     return EVERYTHING_FINE;
 }

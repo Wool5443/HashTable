@@ -64,7 +64,7 @@ static const char* HASH_NAMES[] =
 {
     "Zero",
     "Length",
-    "FirtChar",
+    "FirstChar",
     "SumLength",
     "Sum",
     "MurMur",
@@ -92,9 +92,10 @@ enum Contexts
     CRC32_HASH_NUMBER,
 };
 
-static const char* WORDS_PATH  = "../Words.txt";
-static const char* LOG_FOLDER  = "../log/LinkedList";
-static const size_t HASH_COUNT = ArrayLength(HASH_FUNCTIONS);
+static const char*  WORDS_PATH      = "../Words.txt";
+static const char*  LOG_FOLDER      = "../log/LinkedList";
+static const char*  FINAL_TEST_PATH = "../Timings/FinalTime.csv";
+static const size_t HASH_COUNT      = ArrayLength(HASH_FUNCTIONS);
 
 int main()
 {
@@ -112,21 +113,24 @@ int main()
     static TestContext contexts[HASH_COUNT] = {};
     for (size_t i = 0; i < HASH_COUNT; i++)
     {
-        contexts[i].wordsPath = WORDS_PATH;
-        contexts[i].resultPath = RESULT_FILES[i];
+        contexts[i].wordsPath          = WORDS_PATH;
+        contexts[i].resultPath         = RESULT_FILES[i];
         contexts[i].containersDataPath = CONTAINER_DATA_FILES[i];
-        contexts[i].timingPath = TIMING_RESULT_FILES[i];
-        contexts[i].containersCount = CONTAINERS_COUNT;
-        contexts[i].hashName = HASH_NAMES[i];
-        contexts[i].hashFunction = HASH_FUNCTIONS[i];
+        contexts[i].timingPath         = TIMING_RESULT_FILES[i];
+        contexts[i].containersCount    = CONTAINERS_COUNT;
+        contexts[i].hashName           = HASH_NAMES[i];
+        contexts[i].hashFunction       = HASH_FUNCTIONS[i];
     }
 
-    int startHash = ZERO_HASH_NUMBER;
-
-    for (int i = startHash; i < HASH_COUNT; i++)
+    #ifdef FINAL_TESTING
+        contexts[CRC32_HASH_NUMBER].timingPath = FINAL_TEST_PATH;
+        PRINT_ERROR(contexts[CRC32_HASH_NUMBER].hashName, Test(&contexts[CRC32_HASH_NUMBER]));
+    #else
+    for (int i = 0; i < HASH_COUNT; i++)
     {
         PRINT_ERROR(contexts[i].hashName, Test(&contexts[i]));
     }
+    #endif
 
     return 0;
 }
