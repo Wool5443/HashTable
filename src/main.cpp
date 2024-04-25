@@ -12,7 +12,7 @@ do                                                                              
 {                                                                                               \
     ErrorCode _error = error;                                                                   \
     if (_error) SetConsoleColor(stdout, COLOR_RED); else SetConsoleColor(stdout, COLOR_GREEN);  \
-    printf("%s: %s[%d]\n", hash, ERROR_CODE_NAMES[_error], _error);                             \
+    printf("%s\t%s[%d]\n", hash, ERROR_CODE_NAMES[_error], _error);                             \
     SetConsoleColor(stdout, COLOR_WHITE);                                                       \
 } while (0)
 
@@ -95,10 +95,9 @@ enum Contexts
 
 static const char*  WORDS_PATH      = "../Words.txt";
 static const char*  LOG_FOLDER      = "../log/LinkedList";
-static const char*  FINAL_TEST_PATH = "../Timings/FinalTime.csv";
 static const size_t HASH_COUNT      = ArrayLength(HASH_FUNCTIONS);
 
-int main()
+int main(int argc, const char* argv[])
 {
     static const size_t HASH_FUNCTIONS_LENGTH       = HASH_COUNT;
     static const size_t HASH_NAMES_LENGTH           = ArrayLength(HASH_NAMES);
@@ -124,7 +123,8 @@ int main()
     }
 
     #ifdef FINAL_TESTING
-        contexts[CRC32_HASH_NUMBER].timingPath = FINAL_TEST_PATH;
+        if (argc != 2) { PRINT_ERROR("Give output file!!!", ERROR_BAD_FILE); return ERROR_BAD_FILE; };
+        contexts[CRC32_HASH_NUMBER].timingPath = argv[1];
         PRINT_ERROR(contexts[CRC32_HASH_NUMBER].hashName, Test(&contexts[CRC32_HASH_NUMBER]));
     #else
     for (size_t i = 0; i < HASH_COUNT; i++)

@@ -67,7 +67,7 @@ ContainersCount = 10007
 
 | Оптимизация       | Тики             | Ускорение относительно "базы" | Относительное ускорение |
 |-------------------|------------------|-------------------------------|-------------------------|
-| O3                | $3.659 \cdot 10^{8} \pm 0.61\%$ | 1                             | 1        |
+| O3                | $3.955 \cdot 10^{8} \pm 0.97\%$ | 1                             | 1        |
 
 <details>
 <summary> <b> Profiler data O3 </b> </summary>
@@ -79,16 +79,29 @@ ContainersCount = 10007
 Видно, что сейчас большую процессорного времени занимает strcmp, перепишем его, используя интринсики.
 
 ```c++
-bool StrcmpAVX512(const char* s1, const char* s2)
+bool StrcmpAVX(const char* s1, const char* s2)
 {
-    __m512i s1_intr = _mm512_load_epi64(s1);
-    __m512i s2_intr = _mm512_load_epi64(s2);
-    __mmask64 cmp   = _mm512_cmp_epi8_mask(s1_intr, s2_intr, _MM_CMPINT_EQ);
-    return cmp == (~(uint64_t)0);
+    __m256i s1Vector = _mm256_loadu_epi8(s1);
+    __m256i s2Vector = _mm256_loadu_epi8(s2);
+
+    __m256i difference = _mm256_xor_epi32(s1Vector, s2Vector);
+
+    __mmask32 res = _mm256_test_epi8_mask(difference, difference);
+
+    return res == 0;
 }
 ```
 
-| Оптимизация       | Тики             | Ускорение относительно "базы" | Относительное ускорение |
-|-------------------|------------------|-------------------------------|-------------------------|
-| O3 StrCmpAVX512   | $2.909 \cdot 10^{8}$ | 1.13                          | 1.13                    |
+| Оптимизация       | Тики                            | Ускорение относительно "базы" | Относительно предыдущего |
+|-------------------|---------------------------------|-------------------------------|--------------------------|
+| O3 StrCmpAVX      | $3.694 \cdot 10^{8} \pm 0.99\%$ | $7.07\%$                      | $7.07\%$                 |
+
+Посмотрим, что ещё можно улучшить.
+
+<details>
+<summary> <b> Profiler data O3 </b> </summary>
+<p align="center">
+<img src = img/O3StrcmpAVX.png style = "width: 65vw">
+</p>
+</details>
 
