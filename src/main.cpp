@@ -98,16 +98,16 @@ static const size_t HASH_COUNT = ArrayLength(HASH_FUNCTIONS);
 
 int main()
 {
-    static const size_t HASH_FUNCTIONS_LENGTH = HASH_COUNT;
-    static const size_t HASH_NAMES_LENGTH = ArrayLength(HASH_NAMES);
-    static const size_t RESULT_FILES_LENGTH = ArrayLength(RESULT_FILES);
+    static const size_t HASH_FUNCTIONS_LENGTH       = HASH_COUNT;
+    static const size_t HASH_NAMES_LENGTH           = ArrayLength(HASH_NAMES);
+    static const size_t RESULT_FILES_LENGTH         = ArrayLength(RESULT_FILES);
     static const size_t CONTAINER_DATA_FILES_LENGTH = ArrayLength(CONTAINER_DATA_FILES);
-    static const size_t TIME_RESULT_FILES_LENGTH = ArrayLength(TIMING_RESULT_FILES);
+    static const size_t TIME_RESULT_FILES_LENGTH    = ArrayLength(TIMING_RESULT_FILES);
 
-    static_assert(HASH_FUNCTIONS_LENGTH == HASH_NAMES_LENGTH &&
-        RESULT_FILES_LENGTH == CONTAINER_DATA_FILES_LENGTH &&
-        RESULT_FILES_LENGTH == TIME_RESULT_FILES_LENGTH &&
-        HASH_FUNCTIONS_LENGTH == RESULT_FILES_LENGTH);
+    static_assert(HASH_FUNCTIONS_LENGTH == HASH_NAMES_LENGTH           &&
+                  RESULT_FILES_LENGTH   == CONTAINER_DATA_FILES_LENGTH &&
+                  RESULT_FILES_LENGTH   == TIME_RESULT_FILES_LENGTH    &&
+                  HASH_FUNCTIONS_LENGTH == RESULT_FILES_LENGTH);
 
     static TestContext contexts[HASH_COUNT] = {};
     for (size_t i = 0; i < HASH_COUNT; i++)
