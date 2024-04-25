@@ -15,7 +15,10 @@ def main():
     values    = []
 
     timings_folder = "Timings/"
-    timings_files  = [timings_folder + x for x in listdir(timings_folder) if x[-3:] == "csv"]
+    timing_1x_condition = lambda x: x[-6:] == "1x.csv"
+    timing_2x_condition = lambda x: x[-6:] == "2x.csv"
+    print(listdir(timings_folder))
+    timings_files  = [timings_folder + x for x in listdir(timings_folder) if timing_1x_condition(x)]
 
     columns = []    
 
@@ -31,7 +34,8 @@ def main():
         print(f"|{col.name}", end='')
     print(f"|\n{'|-----------' * len(columns)}|")
     for col in columns:
-        print(f"|{col.value:.3E}", end='')
+        good_val = str(f"{col.value:.3E}").replace("E+", "*10^{") + '}'
+        print(f"|${good_val}$", end='')
     print("|")
 
 

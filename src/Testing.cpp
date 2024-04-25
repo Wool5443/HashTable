@@ -60,7 +60,7 @@ ErrorCode Test(TestContext* context)
 
     fprintf(timingFile, "\"%s - load\"\t%llu\n", context->hashName, loadDuration);
     fprintf(timingFile, "\"%s - operations\"\t%llu\n", context->hashName, hashOperationDuration);
-    fprintf(timingFile, "\"%s - sum\"\t%llu\n", context->hashName, loadDuration + hashOperationDuration);
+    fprintf(timingFile, "\"%s\"\t%llu\n", context->hashName, loadDuration + hashOperationDuration);
 
     load.buffer.Destructor();
     load.split. Destructor();
