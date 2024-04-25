@@ -1,7 +1,7 @@
 #include <string.h>
 #include "FileLoader.hpp"
 
-static const size_t ALLIGNMENT = 64;
+static const size_t ALLIGNMENT = 48;
 
 LoadedResult LoadFileToTable(HashTable* hashTable, const char* filePath)
 {

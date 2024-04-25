@@ -5,6 +5,7 @@
 #include "FileLoader.hpp"
 #include "Hash.hpp"
 #include "Testing.hpp"
+#include "StrcmpAVX.hpp"
 
 #define PRINT_ERROR(hash, error)                                                                \
 do                                                                                              \
@@ -126,7 +127,7 @@ int main()
         contexts[CRC32_HASH_NUMBER].timingPath = FINAL_TEST_PATH;
         PRINT_ERROR(contexts[CRC32_HASH_NUMBER].hashName, Test(&contexts[CRC32_HASH_NUMBER]));
     #else
-    for (int i = 0; i < HASH_COUNT; i++)
+    for (size_t i = 0; i < HASH_COUNT; i++)
     {
         PRINT_ERROR(contexts[i].hashName, Test(&contexts[i]));
     }

@@ -10,32 +10,47 @@
 
 ## Исследование загруженности таблицы
 
-### ZeroHash
-![alt text](Containers/ContainersZero.csvgraph.png)
+<details>
+<summary> <b> Distributions </b> </summary>
+<p align="center">
 
-### FirstChar
-![alt text](Containers/ContainersFirstChar.csvgraph.png)
+<figure>
+    <img src = Containers/ContainersZero.csvgraph.png style = "width: 65vw">
+    <figcaption align="center">Zero</figcaption>
+</figure>
+<figure>
+    <img src = Containers/ContainersLength.csvgraph.png style = "width: 65vw">
+    <figcaption align="center">Length</figcaption>
+</figure>
+<figure>
+    <img src = Containers/ContainersSumLength.csvgraph.png style = "width: 65vw">
+    <figcaption align="center">SumLength</figcaption>
+</figure>
+<figure>
+    <img src = Containers/ContainersFirstChar.csvgraph.png style = "width: 65vw">
+    <figcaption align="center">FirstChar</figcaption>
+</figure>
+<figure>
+    <img src = Containers/ContainersSum.csvgraph.png style = "width: 65vw">
+    <figcaption align="center">Sum</figcaption>
+</figure>
+<figure>
+    <img src = Containers/ContainersMurMur.csvgraph.png style = "width: 65vw">
+    <figcaption align="center">MurMur</figcaption>
+</figure>
+<figure>
+    <img src = Containers/ContainersCRC32.csvgraph.png style = "width: 65vw">
+    <figcaption align="center">CRC32</figcaption>
+</figure>
 
-### LengthHash
-![alt text](Containers/ContainersLength.csvgraph.png)
-
-### SumLengthHash
-![alt text](Containers/ContainersSumLength.csvgraph.png)
-
-### SumHash
-![alt text](Containers/ContainersSum.csvgraph.png)
-
-### Murmur2AHash
-![alt text](Containers/ContainersMurMur.csvgraph.png)
-
-### CRC32
-![alt text](Containers/ContainersCRC32.csvgraph.png)
+</p>
+</details>
 
 ## Тесты 0 итерация
 Containers Count = 5113
 |Zero|Length|SumLength|FirstChar|Sum|MurMur|CRC32|
 |-----------|-----------|-----------|-----------|-----------|-----------|-----------|
-|$7.125*10^{10}$|$8.125*10^{09}$|$3.698*10^{09}$|$1.921*10^{09}$|$4.546*10^{08}$|$4.228*10^{08}$|$3.905*10^{08}$|
+|$7.125\cdot10^{10}$|$8.125\cdot10^{09}$|$3.698\cdot10^{09}$|$1.921\cdot10^{09}$|$4.546\cdot10^{08}$|$4.228\cdot10^{08}$|$3.905\cdot10^{08}$|
 
 ## Оптимизация
 
@@ -45,19 +60,26 @@ Containers Count = 5113
 ContainersCount = 10007
 |Zero|Length|SumLength|FirstChar|Sum|MurMur|CRC32|
 |-----------|-----------|-----------|-----------|-----------|-----------|-----------|
-|$7.120*10^{10}$|$7.893*10^{09}$|$3.582*10^{09}$|$1.864*10^{09}$|$4.330*10^{08}$|$4.077*10^{08}$|$3.788*10^{08}$|
+|$7.120\cdot10^{10}$|$7.893\cdot10^{09}$|$3.582\cdot10^{09}$|$1.864\cdot10^{09}$|$4.330\cdot10^{08}$|$4.077\cdot10^{08}$|$3.788\cdot10^{08}$|
 
 Видно, что сильнее всего ускорились **MurMur** и **CRC32**, но последний всё ещё быстрее, поэтому далее будем использовать
 его. Теперь 100 раз прогоним наш тест, и запишем этот результат как "базу".
 
 | Оптимизация       | Тики             | Ускорение относительно "базы" | Относительное ускорение |
 |-------------------|------------------|-------------------------------|-------------------------|
-| O3                | $3.294 \cdot 10^{8}$ | 1                             | 1                       |
+| O3                | $3.659 \cdot 10^{8} \pm 0.61\%$ | 1                             | 1        |
+
+<details>
+<summary> <b> Profiler data O3 </b> </summary>
+<p align="center">
+<img src = img/O3.png style = "width: 65vw">
+</p>
+</details>
 
 Видно, что сейчас большую процессорного времени занимает strcmp, перепишем его, используя интринсики.
 
 ```c++
-bool StrcmpAVX512(const char\cdot s1, const char\cdot s2)
+bool StrcmpAVX512(const char* s1, const char* s2)
 {
     __m512i s1_intr = _mm512_load_epi64(s1);
     __m512i s2_intr = _mm512_load_epi64(s2);
@@ -65,8 +87,6 @@ bool StrcmpAVX512(const char\cdot s1, const char\cdot s2)
     return cmp == (~(uint64_t)0);
 }
 ```
-
-![alt text](img/O3_5113_StrcmpAVX512.png)
 
 | Оптимизация       | Тики             | Ускорение относительно "базы" | Относительное ускорение |
 |-------------------|------------------|-------------------------------|-------------------------|

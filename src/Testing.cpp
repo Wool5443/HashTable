@@ -1,3 +1,4 @@
+#include <string.h>
 #include "Testing.hpp"
 #include "FileLoader.hpp"
 #include "Hash.hpp"
@@ -34,7 +35,7 @@ ErrorCode Test(TestContext* context)
            );
 
     ON_FINAL_TEST(
-    FILE* timingFile = fopen(context->timingPath, "ab");
+    FILE* timingFile = fopen(context->timingPath, "wb");
     if (!timingFile) return ERROR_BAD_FILE;
     fprintf(timingFile, "\"Load\"\t\"Hash operations\"\t\"All\"\n");
     for (int i = 0; i < FINAL_TESTING; i++) {
@@ -75,9 +76,9 @@ ErrorCode Test(TestContext* context)
     #else
     FILE* timingFile = fopen(context->timingPath, "wb");
     if (!timingFile) return ERROR_BAD_FILE;
-    fprintf(timingFile, "\"%s - load\"\t%llu\n", context->hashName, loadDuration);
-    fprintf(timingFile, "\"%s - operations\"\t%llu\n", context->hashName, hashOperationDuration);
-    fprintf(timingFile, "\"%s\"\t%llu\n", context->hashName, loadDuration + hashOperationDuration);
+    fprintf(timingFile, "\"%s - load\"\t%lu\n", context->hashName, loadDuration);
+    fprintf(timingFile, "\"%s - operations\"\t%lu\n", context->hashName, hashOperationDuration);
+    fprintf(timingFile, "\"%s\"\t%lu\n", context->hashName, loadDuration + hashOperationDuration);
     fclose(timingFile);
     #endif
 
