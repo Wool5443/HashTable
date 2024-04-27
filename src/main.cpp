@@ -59,7 +59,7 @@ static const char* TIMING_RESULT_FILES[] =
     "../Timings/TimingsMurMur1x.csv",
     "../Timings/TimingsCRC321x.csv",
 };
-static const size_t CONTAINERS_COUNT = 5113;
+static const size_t CONTAINERS_COUNT = 4096;
 #endif
 static const char* HASH_NAMES[] =
 {
@@ -96,6 +96,13 @@ enum Contexts
 static const char*  WORDS_PATH      = "../Words.txt";
 static const char*  LOG_FOLDER      = "../log/LinkedList";
 static const size_t HASH_COUNT      = ArrayLength(HASH_FUNCTIONS);
+
+static uint64_t _mod2(uint64_t value, const uint64_t mod)
+{
+    asm volatile("and  %0, %1" : "+r"(value) : "r"(mod - 1));
+
+    return value;
+}
 
 int main(int argc, const char* argv[])
 {
