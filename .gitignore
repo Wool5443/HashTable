@@ -3,5 +3,6 @@ build/
 log/
 Results/
 *.csv
+Timings/
 perf.data
 perf.data.old
