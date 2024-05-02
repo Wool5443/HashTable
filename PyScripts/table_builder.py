@@ -54,7 +54,7 @@ def main():
         print(f"|{col.name}", end='')
     print(f"|\n{'|-----------' * len(columns)}|")
     for col in columns:
-        good_val = str(f"{col.value:.3E}").replace("E+", "*10^{") + '}'
+        good_val = str(f"{col.value:.3E}").replace("E+", "\\cdot10^{") + '}'
         print(f"|${good_val}$", end='')
     print("|")
 

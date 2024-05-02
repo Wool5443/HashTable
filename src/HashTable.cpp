@@ -3,11 +3,12 @@
 #include "HashTable.hpp"
 #include "PrettyDumpList.hpp"
 
-static uint64_t _mod2(uint64_t value, const uint64_t mod);
+// static uint64_t _mod2(uint64_t value, const uint64_t mod);
 
 static const uint64_t seed = 0xabcfedfabfeacdfd;
 
-#define GET_CNT_NUM _mod2(this->hashFunc(key.buf, key.length, seed), this->containersCount)
+// #define GET_CNT_NUM _mod2(this->hashFunc(key.buf, key.length, seed), this->containersCount)
+#define GET_CNT_NUM this->hashFunc(key.buf, key.length, seed) % this->containersCount
 
 HashTableElementResult _get(hashTableKey_t key, LinkedList* container);
 
