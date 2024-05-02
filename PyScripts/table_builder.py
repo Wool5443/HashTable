@@ -2,11 +2,20 @@ from csv import reader
 from sys import argv
 from os import listdir
 
+
 class Column:
     name: str
     value: int
 
     def __init__(self, name: str, value: int):
+        self.name  = name
+        self.value = value
+
+class Row:
+    name: str
+    value: list[float]
+
+    def __init__(self, name: str, value: list[float]):
         self.name  = name
         self.value = value
 
@@ -23,14 +32,7 @@ HASH_RANK = \
 }
 
 
-def main():
-    if len(argv) != 2:
-        print("What to build table from? 1x or 2x")
-        return -1
-
-    col_names = []
-    values    = []
-
+def print_general_timings():
     timings_folder = "Timings/"
 
     timing_1x_condition = lambda x: x[-6:] == "1x.csv"
@@ -57,6 +59,36 @@ def main():
         good_val = str(f"{col.value:.3E}").replace("E+", "\\cdot10^{") + '}'
         print(f"|${good_val}$", end='')
     print("|")
+
+
+def print_final_timings():
+    file = "Timings/Final Tests.csv"
+
+    rows = []
+
+    with open(file, 'r') as f:
+        csv_reader = reader(f, delimiter='\t', quotechar='"')
+        for row in csv_reader:
+            rows.append(Row(row[0], list(map(float, row[1:]))))
+
+    print("|Оптимизация|Тики|Ускорение относительно \"базы\"|Относительное ускорение|")
+    print(f"{'|-----------' * 4}|")
+
+    for row in rows:
+        print(f"|{row.name}", end='|')
+        val = str(f"{row.value[0]:.3E}").replace("E+", "\\cdot10^{") + '}'
+        eps_val = str(row.value[2])
+        rel_base = str(row.value[3])
+        rel_prev = str(row.value[4])
+        print(f"${val} \\pm {eps_val}\\%$|${rel_base}\\%$|${rel_prev}\\%$|")
+
+
+def main():
+    if len(argv) == 2:
+        print_general_timings()
+    else:
+        print_final_timings()
+
 
 
 if __name__ == '__main__':

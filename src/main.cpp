@@ -36,19 +36,7 @@ static const char* CONTAINER_DATA_FILES[] =
     "../Containers/ContainersMurMur.csv",
     "../Containers/ContainersCRC32.csv",
 };
-#ifdef DOUBLE_SIZE
-static const char* TIMING_RESULT_FILES[] =
-{
-    "../Timings/TimingsZero2x.csv",
-    "../Timings/TimingsLength2x.csv",
-    "../Timings/TimingsFirstChar2x.csv",
-    "../Timings/TimingsSumLength2x.csv",
-    "../Timings/TimingsSum2x.csv",
-    "../Timings/TimingsMurMur2x.csv",
-    "../Timings/TimingsCRC322x.csv",
-};
-static const size_t CONTAINERS_COUNT = 10007;
-#else
+
 static const char* TIMING_RESULT_FILES[] =
 {
     "../Timings/TimingsZero1x.csv",
@@ -60,7 +48,6 @@ static const char* TIMING_RESULT_FILES[] =
     "../Timings/TimingsCRC321x.csv",
 };
 static const size_t CONTAINERS_COUNT = 8192;
-#endif
 static const char* HASH_NAMES[] =
 {
     "Zero",
@@ -82,7 +69,7 @@ static const hashFunction_t HASH_FUNCTIONS[] =
     CRC32,
 };
 
-enum Contexts
+enum ContextNumbers
 {
     ZERO_HASH_NUMBER,
     LENGTH_HASH_NUMBER,

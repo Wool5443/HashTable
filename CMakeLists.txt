@@ -17,7 +17,6 @@ set(CMAKE_CXX_FLAGS_RELEASE "-masm=intel -march=native -mavx512f -O3 -g -DNDEBUG
 set(CMAKE_EXE_LINKER_FLAGS "-no-pie")
 
 add_compile_definitions(NEMIT_DATA)
-# add_compile_definitions(DOUBLE_SIZE)
 add_compile_definitions(FINAL_TESTING=100)
 
 set(SOURCES 
@@ -37,7 +36,8 @@ set(SOURCES
     "src/FileLoader.cpp"
     "src/Hash.cpp"
     "src/Testing.cpp"
-    "src/CRC32 with loop unrolling.asm"
+    # "src/CRC32 with loop unrolling.asm"
+    "src/CRC32.asm"
     "src/StrcmpAVX.cpp"
     "headers/HashTable.hpp"
     "headers/DumpHashTable.hpp"
