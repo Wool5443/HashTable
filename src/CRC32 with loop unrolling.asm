@@ -29,7 +29,7 @@ CRC32:
     test r8, r8
     jz   .end
 
-    jmp  [.1 + r8 - 1]
+    jmp  [table + r8*8 - 8]
 
     .1:
         lodsb
@@ -73,3 +73,12 @@ CRC32:
     mov  rax, rdx
 
     ret
+
+table:
+    dq  CRC32.1
+    dq  CRC32.2
+    dq  CRC32.3
+    dq  CRC32.4
+    dq  CRC32.5
+    dq  CRC32.6
+    dq  CRC32.7

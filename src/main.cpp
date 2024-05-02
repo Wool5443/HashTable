@@ -59,7 +59,7 @@ static const char* TIMING_RESULT_FILES[] =
     "../Timings/TimingsMurMur1x.csv",
     "../Timings/TimingsCRC321x.csv",
 };
-static const size_t CONTAINERS_COUNT = 5113;
+static const size_t CONTAINERS_COUNT = 4096;
 #endif
 static const char* HASH_NAMES[] =
 {
