@@ -7,9 +7,6 @@ static inline uint64_t _mod2(uint64_t value, const uint64_t mod);
 
 static const uint64_t seed = 0xabcfedfabfeacdfd;
 
-#define GET_CNT_NUM _mod2(this->hashFunc(key.buf, key.length, seed), this->containersCount)
-// #define GET_CNT_NUM this->hashFunc(key.buf, key.length, seed) % this->containersCount
-
 HashTableElementResult _get(hashTableKey_t key, LinkedList* container);
 
 ErrorCode HashTable::Init(size_t containersCount, hashFunction_t hashFunc, const char* logFolder)
@@ -83,14 +80,16 @@ ErrorCode HashTable::Remove(hashTableKey_t key)
     return container->Pop(index).error;
 }
 
+#define GET_CNT_NUM() _mod2(this->hashFunc(key.buf, key.length, seed), this->containersCount)
+// #define GET_CNT_NUM() this->hashFunc(key.buf, key.length, seed) % this->containersCount
 bool HashTable::Contains(hashTableKey_t key) const
 {
-    return _get(key, &this->containers[GET_CNT_NUM]).error == EVERYTHING_FINE;
+    return _get(key, &this->containers[GET_CNT_NUM()]).error == EVERYTHING_FINE;
 }
 
 HashTableElementResult HashTable::Get(hashTableKey_t key) const
 {
-    return _get(key, &this->containers[GET_CNT_NUM]);
+    return _get(key, &this->containers[GET_CNT_NUM()]);
 }
 
 HashTableElementResult _get(hashTableKey_t key, LinkedList* container)

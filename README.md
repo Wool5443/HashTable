@@ -4,7 +4,7 @@
 
 ## Система
 - **CPU** Intel Core i5 1135G7
-- **OS** Arch Linux x86_64 6.8.5-zen1-1-zen
+- **OS** Arch Linux x86_64 6.8.8-zen1-1-zen
 - **RAM** 8GB 3200 Mhz
 - **Compiler** gcc 13.2.1
 
