@@ -3,6 +3,9 @@
 #include "HashTable.hpp"
 #include "PrettyDumpList.hpp"
 
+#define GET_CNT_NUM() _mod2(this->hashFunc(key.buf, key.length, seed), this->containersCount)
+// #define GET_CNT_NUM() this->hashFunc(key.buf, key.length, seed) % this->containersCount
+
 static inline uint64_t _mod2(uint64_t value, const uint64_t mod);
 
 static const uint64_t seed = 0xabcfedfabfeacdfd;
@@ -54,7 +57,7 @@ ErrorCode HashTable::Verify()
 
 ErrorCode HashTable::Add(hashTableKey_t key)
 {
-    LinkedList* container = &this->containers[GET_CNT_NUM];
+    LinkedList* container = &this->containers[GET_CNT_NUM()];
     
     HashTableElementResult elem = _get(key, container);
 
@@ -69,7 +72,7 @@ ErrorCode HashTable::Add(hashTableKey_t key)
 
 ErrorCode HashTable::Remove(hashTableKey_t key)
 {
-    LinkedList* container = &this->containers[GET_CNT_NUM];
+    LinkedList* container = &this->containers[GET_CNT_NUM()];
 
     HashTableElementResult elem = _get(key, container);
 
@@ -80,8 +83,6 @@ ErrorCode HashTable::Remove(hashTableKey_t key)
     return container->Pop(index).error;
 }
 
-#define GET_CNT_NUM() _mod2(this->hashFunc(key.buf, key.length, seed), this->containersCount)
-// #define GET_CNT_NUM() this->hashFunc(key.buf, key.length, seed) % this->containersCount
 bool HashTable::Contains(hashTableKey_t key) const
 {
     return _get(key, &this->containers[GET_CNT_NUM()]).error == EVERYTHING_FINE;

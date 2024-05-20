@@ -17,7 +17,7 @@ set(CMAKE_CXX_FLAGS_RELEASE "-masm=intel -march=native -mavx512f -O3 -g -DNDEBUG
 set(CMAKE_EXE_LINKER_FLAGS "-no-pie")
 
 add_compile_definitions(NEMIT_DATA)
-add_compile_definitions(FINAL_TESTING=100)
+add_compile_definitions(FINAL_TESTING=1)
 
 set(SOURCES 
     "LinkedList/Utils/Utils.cpp"
